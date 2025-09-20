@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/TitleScreen.unity
+    guid: 9208f67c2579a494ea55e18a5a3d45af
+  - enabled: 1
+    path: Assets/Scenes/Sandbox_Movement.unity
+    guid: 069c70cdfe4d8dd40ae6a52fcb00f19d
+  - enabled: 1
+    path: Assets/Scenes/EndScreen.unity
+    guid: 964bf23258a72b441b3d9e89cb791014
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
