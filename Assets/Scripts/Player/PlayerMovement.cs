@@ -76,8 +76,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name);
-        if(collision.gameObject.CompareTag("EnemyHitbox"))
+        //This is how we detect the zombie head instead of the entire zomzbie
+        Collider2D targetArea = collision.GetContact(0).collider;
+        // Debug.Log(targetArea.gameObject.name);
+        if(targetArea.gameObject.CompareTag("EnemyHitbox"))
         {
             rigid.AddForce(new Vector2(-transform.right.x * 7, 7), ForceMode2D.Impulse);
         }

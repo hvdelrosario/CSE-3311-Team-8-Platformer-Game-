@@ -18,10 +18,11 @@ public class PlayerStats : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name);
-        if(collision.gameObject.CompareTag("EnemyHitbox"))
+        Collider2D targetArea = collision.GetContact(0).collider;
+        // Debug.Log(targetArea.gameObject.name);
+        if(targetArea.gameObject.CompareTag("EnemyHitbox"))
         {
-            StartCoroutine(gotHit());
+           StartCoroutine(gotHit());
         }
     }
 
