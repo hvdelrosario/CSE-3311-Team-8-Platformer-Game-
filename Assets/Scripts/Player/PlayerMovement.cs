@@ -5,14 +5,14 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     public InputAction playerControls;
-    public GameObject feet;
+    private GameObject feet;
     private Rigidbody2D rigid;
     private Vector2 moveDirection = new Vector2();
     private float xForce;
     private float yForce;
     public LayerMask layers;
-    public bool jumpActive;
-    public int jumpFrames;
+    private bool jumpActive = false;
+    private int jumpFrames;
     void Start()
     {
         feet = transform.GetChild(0).gameObject;
@@ -62,6 +62,6 @@ public class PlayerMovement : MonoBehaviour
             jumpActive = false;
         }
         Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
-        rigid.AddForce(new Vector2(3 * xForce, 30 * yForce));
+        rigid.AddForce(new Vector2(2 * xForce, 30 * yForce));
     }
 }

@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 123631902}
   - component: {fileID: 123631901}
   - component: {fileID: 123631900}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Platform_Float1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +446,6 @@ GameObject:
   m_Component:
   - component: {fileID: 156593743}
   - component: {fileID: 156593742}
-  - component: {fileID: 156593741}
   - component: {fileID: 156593744}
   m_Layer: 7
   m_Name: Ground_Left
@@ -455,52 +454,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!61 &156593741
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 156593740}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!212 &156593742
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -631,7 +584,7 @@ GameObject:
   - component: {fileID: 459659010}
   - component: {fileID: 459659009}
   - component: {fileID: 459659008}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Stairs_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1020,7 +973,7 @@ GameObject:
   - component: {fileID: 840247603}
   - component: {fileID: 840247602}
   - component: {fileID: 840247601}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hazard_Lava
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1057,7 +1010,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1157,7 +1110,7 @@ GameObject:
   - component: {fileID: 1084563465}
   - component: {fileID: 1084563464}
   - component: {fileID: 1084563463}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Stairs_C
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1490,7 +1443,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 2
   m_AngularDamping: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -1643,6 +1596,8 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 128
+  jumpActive: 0
+  jumpFrames: 0
 --- !u!1 &1532598884
 GameObject:
   m_ObjectHideFlags: 0
@@ -1705,7 +1660,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2, y: 1}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!212 &1532598887
 SpriteRenderer:
@@ -1791,7 +1746,7 @@ GameObject:
   - component: {fileID: 1603096193}
   - component: {fileID: 1603096192}
   - component: {fileID: 1603096191}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Stairs_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1925,9 +1880,9 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 25926868}
   - {fileID: 124463876}
+  - {fileID: 1429766956}
   - {fileID: 156593743}
   - {fileID: 1532598888}
-  - {fileID: 1429766956}
   - {fileID: 840247603}
   - {fileID: 123631902}
   - {fileID: 459659010}
