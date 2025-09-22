@@ -61,7 +61,25 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpActive = false;
         }
+
+        if(xForce > 0)
+        {
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+        else if(xForce < 0)
+        {
+            transform.eulerAngles = new Vector3(0, 180, 0);
+        }
         Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
         rigid.AddForce(new Vector2(2 * xForce, 30 * yForce));
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log(collision.gameObject.name);
+        if(collision.gameObject.CompareTag("EnemyHitbox"))
+        {
+            rigid.AddForce(new Vector2(-transform.right.x * 7, 7), ForceMode2D.Impulse);
+        }
     }
 }
