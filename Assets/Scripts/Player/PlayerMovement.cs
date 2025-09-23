@@ -8,11 +8,11 @@ public class PlayerMovement : MonoBehaviour
     private GameObject feet;
     private Rigidbody2D rigid;
     private Vector2 moveDirection = new Vector2();
-    private float xForce;
-    private float yForce;
+    public float xForce;
+    public float yForce;
     public LayerMask layers;
     private bool jumpActive = false;
-    private int jumpFrames;
+    public float jumpTime;
     void Start()
     {
         feet = transform.GetChild(0).gameObject;
@@ -33,31 +33,17 @@ public class PlayerMovement : MonoBehaviour
         xForce = moveDirection.x;
         yForce = 0;
         //If touching ground, jump is available
-        if(jumpFrames <= 0 && Physics2D.Raycast(feet.transform.position, -feet.transform.up, 0.01f, layers))
+        if(jumpTime <= 0 && Physics2D.Raycast(feet.transform.position, -feet.transform.up, 0.1f, layers))
         {
-           jumpFrames = 15;
+           jumpTime = 0.25f;
         }
         //#Negate gravity when starting jump
-        if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpFrames > 0)
+        if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpTime > 0)
         {
             jumpActive = true;
             rigid.linearVelocity = new Vector3(rigid.linearVelocity.x, 0, 0);
         }
-        //Only consume frames when up arrow pressed and in the process of jumping
-        if(jumpFrames > 0 && jumpActive)
-        {
-            if(Keyboard.current.upArrowKey.isPressed)
-            {
-                yForce = moveDirection.y;
-                jumpFrames -= 1;
-            }
-            //If you cancel a jump while it's active then your jump is done
-            else
-            {
-                jumpFrames = 0;
-            }
-        }
-        if(jumpFrames <= 0)
+        if(jumpTime <= 0)
         {
             jumpActive = false;
         }
@@ -71,7 +57,6 @@ public class PlayerMovement : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
         Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
-        rigid.AddForce(new Vector2(2 * xForce, 30 * yForce));
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -83,5 +68,25 @@ public class PlayerMovement : MonoBehaviour
         {
             rigid.AddForce(new Vector2(-transform.right.x * 7, 7), ForceMode2D.Impulse);
         }
+    }
+    //Use fixed update for physics! (As well as any calculations that the physics rely on)
+    void FixedUpdate()
+    {
+        //Only consume jump time when up arrow pressed and in the process of jumping
+        if(jumpTime > 0 && jumpActive)
+        {
+            if(Keyboard.current.upArrowKey.isPressed)
+            {
+                //The longer the button pressed, the less effect the force will be
+                yForce = moveDirection.y * (jumpTime / 0.25f);
+                jumpTime -= Time.fixedDeltaTime;
+            }
+            //If you cancel a jump while it's active then your jump is done
+            else
+            {
+                jumpTime = 0;
+            }
+        }
+        rigid.AddForce(new Vector2(20 * xForce, 75 * yForce));
     }
 }

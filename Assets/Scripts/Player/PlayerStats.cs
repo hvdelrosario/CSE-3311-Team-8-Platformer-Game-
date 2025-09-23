@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+
 public class PlayerStats : MonoBehaviour
 {
     public float playerHealth;
@@ -14,6 +16,10 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(playerHealth <= 0)
+        {
+            SceneManager.LoadScene("EndScreen");
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
