@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask layers;
     private bool jumpActive = false;
     public float jumpTime;
+    private bool dashAvailable = false;
     void Start()
     {
         feet = transform.GetChild(0).gameObject;
@@ -32,10 +33,11 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = playerControls.ReadValue<Vector2>();
         xForce = moveDirection.x;
         yForce = 0;
-        //If touching ground, jump is available
+        //If touching ground, jump and dash is available
         if(jumpTime <= 0 && Physics2D.Raycast(feet.transform.position, -feet.transform.up, 0.1f, layers))
         {
            jumpTime = 0.25f;
+           StartCoroutine(dashCooldown());
         }
         //#Negate gravity when starting jump
         if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpTime > 0)
@@ -57,6 +59,11 @@ public class PlayerMovement : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
         Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
+        if(Keyboard.current.xKey.wasPressedThisFrame && dashAvailable)
+        {
+            rigid.AddForce(new Vector2(transform.right.x * 7, 0), ForceMode2D.Impulse);
+            dashAvailable = false;
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -69,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
             rigid.AddForce(new Vector2(-transform.right.x * 7, 7), ForceMode2D.Impulse);
         }
     }
-    //Use fixed update for physics! (As well as any calculations that the physics rely on)
+    //Use fixed update for physics that are not impulses! (As well as any calculations that the physics rely on)
     void FixedUpdate()
     {
         //Only consume jump time when up arrow pressed and in the process of jumping
@@ -87,6 +94,11 @@ public class PlayerMovement : MonoBehaviour
                 jumpTime = 0;
             }
         }
-        rigid.AddForce(new Vector2(20 * xForce, 75 * yForce));
+        rigid.AddForce(new Vector2(25 * xForce, 100 * yForce));
+    }
+    public IEnumerator dashCooldown()
+    {
+        yield return new WaitForSeconds(0.5f);
+        dashAvailable = true;
     }
 }

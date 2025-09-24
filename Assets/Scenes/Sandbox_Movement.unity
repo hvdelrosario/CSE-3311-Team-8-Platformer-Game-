@@ -825,7 +825,7 @@ Transform:
   m_GameObject: {fileID: 459659007}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.375293, y: 2.417273, z: 0}
+  m_LocalPosition: {x: 6.375293, y: 3.57, z: 0}
   m_LocalScale: {x: 0.9851852, y: 0.2462963, z: 0.4925926}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -843,6 +843,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -968,6 +969,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e94f83a2c746d48a14b3872c0faf1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraScript
+  player: {fileID: 1429766952}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,7 +1443,7 @@ Transform:
   m_GameObject: {fileID: 1084563462}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.34566, y: 2.9098573, z: 0}
+  m_LocalPosition: {x: 8.943, y: 4.418, z: 0}
   m_LocalScale: {x: 0.9851852, y: 0.2462963, z: 0.4925926}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1773,6 +1787,7 @@ GameObject:
   - component: {fileID: 1429766957}
   - component: {fileID: 1429766953}
   - component: {fileID: 1429766958}
+  - component: {fileID: 1429766959}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1830,10 +1845,10 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 2
+  m_LinearDamping: 4
   m_AngularDamping: 0
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b6b9d080908b85249bd599d462acbdda, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1911,7 +1926,7 @@ Transform:
   m_GameObject: {fileID: 1429766952}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.668, y: 3.867, z: 0}
+  m_LocalPosition: {x: -2.09, y: 2.927, z: 0}
   m_LocalScale: {x: 0.4925926, y: 0.9851852, z: 0.4925926}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1999,6 +2014,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   playerHealth: 0
+--- !u!114 &1429766959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429766952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: 0}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: 
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1532598884
 GameObject:
   m_ObjectHideFlags: 0
@@ -2407,7 +2452,7 @@ Transform:
   m_GameObject: {fileID: 1603096190}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.360461, y: 2.66355, z: 0}
+  m_LocalPosition: {x: 7.360461, y: 4.151, z: 0}
   m_LocalScale: {x: 0.9851852, y: 0.2462963, z: 0.4925926}
   m_ConstrainProportionsScale: 0
   m_Children: []
