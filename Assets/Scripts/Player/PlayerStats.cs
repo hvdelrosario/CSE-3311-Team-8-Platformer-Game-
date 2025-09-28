@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem; 
 
 public class PlayerStats : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class PlayerStats : MonoBehaviour
         if(playerHealth <= 0)
         {
             SceneManager.LoadScene("EndScreen");
+        }
+        if(Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene("Sandbox_Movement");
         }
     }
 

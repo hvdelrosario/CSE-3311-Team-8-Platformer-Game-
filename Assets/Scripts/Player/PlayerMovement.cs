@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public InputAction playerControls;
     private GameObject feet;
+    private GameObject trail;
     private Rigidbody2D rigid;
     private Vector2 moveDirection = new Vector2();
     public float xForce;
@@ -17,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         feet = transform.GetChild(0).gameObject;
+        trail = transform.GetChild(1).gameObject;
         rigid = GetComponent<Rigidbody2D>();
         rigid.freezeRotation = true;
     }
@@ -34,10 +36,11 @@ public class PlayerMovement : MonoBehaviour
         xForce = moveDirection.x;
         yForce = 0;
         //If touching ground, jump and dash is available
-        if(jumpTime <= 0 && Physics2D.Raycast(feet.transform.position, -feet.transform.up, 0.1f, layers))
+        if(jumpTime <= 0 && Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers))
         {
-           jumpTime = 0.25f;
-           StartCoroutine(dashCooldown());
+            Debug.Log(GetComponent<BoxCollider2D>().bounds.size);
+            jumpTime = 0.25f;
+            StartCoroutine(dashCooldown());
         }
         //#Negate gravity when starting jump
         if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpTime > 0)
@@ -59,9 +62,10 @@ public class PlayerMovement : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
         Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
+
         if(Keyboard.current.xKey.wasPressedThisFrame && dashAvailable)
         {
-            rigid.AddForce(new Vector2(transform.right.x * 7, 0), ForceMode2D.Impulse);
+            rigid.AddForce(new Vector2(transform.right.x * 10, 0), ForceMode2D.Impulse);
             dashAvailable = false;
         }
     }
@@ -73,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
         // Debug.Log(targetArea.gameObject.name);
         if(targetArea.gameObject.CompareTag("EnemyHitbox"))
         {
-            rigid.AddForce(new Vector2(-transform.right.x * 7, 7), ForceMode2D.Impulse);
+            rigid.AddForce(new Vector2(-transform.right.x * 10, 10), ForceMode2D.Impulse);
         }
     }
     //Use fixed update for physics that are not impulses! (As well as any calculations that the physics rely on)
@@ -85,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
             if(Keyboard.current.upArrowKey.isPressed)
             {
                 //The longer the button pressed, the less effect the force will be
-                yForce = moveDirection.y * (jumpTime / 0.25f);
+                yForce = (jumpTime / 0.25f);
                 jumpTime -= Time.fixedDeltaTime;
             }
             //If you cancel a jump while it's active then your jump is done
@@ -94,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
                 jumpTime = 0;
             }
         }
-        rigid.AddForce(new Vector2(25 * xForce, 100 * yForce));
+        rigid.AddForce(new Vector2(25 * xForce, 200 * yForce));
     }
     public IEnumerator dashCooldown()
     {
