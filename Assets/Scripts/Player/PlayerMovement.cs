@@ -15,12 +15,14 @@ public class PlayerMovement : MonoBehaviour
     private bool jumpActive = false;
     public float jumpTime;
     private bool dashAvailable = false;
+    private CameraScript cameraScript;
     void Start()
     {
         feet = transform.GetChild(0).gameObject;
         trail = transform.GetChild(1).gameObject;
         rigid = GetComponent<Rigidbody2D>();
         rigid.freezeRotation = true;
+        cameraScript = Camera.main.GetComponent<CameraScript>();
     }
     void OnEnable()
     {
@@ -36,9 +38,10 @@ public class PlayerMovement : MonoBehaviour
         xForce = moveDirection.x;
         yForce = 0;
         //If touching ground, jump and dash is available
+        //Should only check once via jumpTime <= 0 otherwise jumping inconsistent
         if(jumpTime <= 0 && Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers))
         {
-            Debug.Log(GetComponent<BoxCollider2D>().bounds.size);
+            cameraScript.setMode(CameraScript.Actions.ZOOMIN);
             jumpTime = 0.25f;
             StartCoroutine(dashCooldown());
         }
@@ -46,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
         if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpTime > 0)
         {
             jumpActive = true;
+            cameraScript.setMode(CameraScript.Actions.ZOOMOUT);
             rigid.linearVelocity = new Vector3(rigid.linearVelocity.x, 0, 0);
         }
         if(jumpTime <= 0)
