@@ -8,14 +8,14 @@ public class PlayerMovement : MonoBehaviour
     private GameObject feet;
     private GameObject trail;
     private Rigidbody2D rigid;
-    private Vector2 moveDirection = new Vector2();
     public float xForce;
     public float yForce;
     public LayerMask layers;
     public float jumpMaxTime = 0.25f;
     public float jumpCurrentTime = 0f;
     public int jumpCharges = 2;
-    private bool dashAvailable = false;
+    public bool dashAvailable = false;
+    private bool touchingGround = false;
     private CameraScript cameraScript;
     void Start()
     {
@@ -35,16 +35,27 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        moveDirection = playerControls.ReadValue<Vector2>();
-        xForce = moveDirection.x;
+        xForce = 0;
         yForce = 0;
+        if(Keyboard.current.leftArrowKey.isPressed)
+        {
+            xForce -= 1;
+        }
+        if(Keyboard.current.rightArrowKey.isPressed)
+        {
+            xForce += 1;
+        }
         //If touching ground, jump and dash is available
         //Should only check once otherwise jumping inconsistent
         //Additionally should not check while jumping as will give n + 1 jumps
-        if(jumpCurrentTime <= 0 && jumpCharges < 2 && Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers))
+        touchingGround = Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers);
+        if(jumpCurrentTime <= 0 && jumpCharges < 2 && touchingGround)
         {
             cameraScript.setMode(CameraScript.Actions.ZOOMIN);
             jumpCharges = 2;
+        }
+        if(touchingGround)
+        {
             StartCoroutine(dashCooldown());
         }
         //#Negate gravity when starting jump

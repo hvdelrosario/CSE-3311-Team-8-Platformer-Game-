@@ -8,13 +8,10 @@ public class PlayerStats : MonoBehaviour
     public float playerHealth;
     private Rigidbody2D rigid;
     private SpriteRenderer sprite;
-    private float maxHeight;
-    private bool rising = true;
     void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
         playerHealth = 10;
-        maxHeight = -1f;
     }
 
     // Update is called once per frame
@@ -28,17 +25,6 @@ public class PlayerStats : MonoBehaviour
         {
             SceneManager.LoadScene("Sandbox_Movement");
         }
-        if(transform.position.y < maxHeight && maxHeight > 4 && rising)
-        {
-            Debug.Log("Peak height is " + maxHeight);
-            rising = false;
-        }
-        if(transform.position.y > maxHeight)
-        {
-            rising = true;
-        }
-        maxHeight = transform.position.y;
-
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
