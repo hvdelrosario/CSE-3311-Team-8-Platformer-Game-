@@ -12,8 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public float xForce;
     public float yForce;
     public LayerMask layers;
-    private bool jumpActive = false;
-    public float jumpTime;
+    public float jumpMaxTime = 0.25f;
+    public float jumpCurrentTime = 0f;
+    public int jumpCharges = 2;
     private bool dashAvailable = false;
     private CameraScript cameraScript;
     void Start()
@@ -38,23 +39,21 @@ public class PlayerMovement : MonoBehaviour
         xForce = moveDirection.x;
         yForce = 0;
         //If touching ground, jump and dash is available
-        //Should only check once via jumpTime <= 0 otherwise jumping inconsistent
-        if(jumpTime <= 0 && Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers))
+        //Should only check once otherwise jumping inconsistent
+        //Additionally should not check while jumping as will give n + 1 jumps
+        if(jumpCurrentTime <= 0 && jumpCharges < 2 && Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers))
         {
             cameraScript.setMode(CameraScript.Actions.ZOOMIN);
-            jumpTime = 0.25f;
+            jumpCharges = 2;
             StartCoroutine(dashCooldown());
         }
         //#Negate gravity when starting jump
-        if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpTime > 0)
+        if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpCharges > 0)
         {
-            jumpActive = true;
+            jumpCurrentTime = jumpMaxTime;
+            jumpCharges -= 1;
             cameraScript.setMode(CameraScript.Actions.ZOOMOUT);
             rigid.linearVelocity = new Vector3(rigid.linearVelocity.x, 0, 0);
-        }
-        if(jumpTime <= 0)
-        {
-            jumpActive = false;
         }
 
         if(xForce > 0)
@@ -84,25 +83,24 @@ public class PlayerMovement : MonoBehaviour
             rigid.AddForce(new Vector2(-transform.right.x * 10, 10), ForceMode2D.Impulse);
         }
     }
-    //Use fixed update for physics that are not impulses! (As well as any calculations that the physics rely on)
+    //Use fixed update for physics that are not impulses (as well as any timers that uses it)!
     void FixedUpdate()
     {
         //Only consume jump time when up arrow pressed and in the process of jumping
-        if(jumpTime > 0 && jumpActive)
+        if(jumpCurrentTime > 0)
         {
             if(Keyboard.current.upArrowKey.isPressed)
             {
-                //The longer the button pressed, the less effect the force will be
-                yForce = (jumpTime / 0.25f);
-                jumpTime -= Time.fixedDeltaTime;
+                yForce = 1;
+                jumpCurrentTime -= Time.deltaTime;
             }
-            //If you cancel a jump while it's active then your jump is done
-            else
+            //If you cancel a jump while it's active then your jump is done (or touch the ground)
+            else if (!Keyboard.current.upArrowKey.isPressed || Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers))
             {
-                jumpTime = 0;
+                jumpCurrentTime = 0;
             }
         }
-        rigid.AddForce(new Vector2(25 * xForce, 200 * yForce));
+        rigid.AddForce(new Vector2(25 * xForce, 125 * yForce));
     }
     public IEnumerator dashCooldown()
     {
