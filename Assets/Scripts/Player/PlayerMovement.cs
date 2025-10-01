@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public InputAction playerControls;
     private GameObject feet;
     private GameObject trail;
+    private GameObject playerOrientation;
     private Rigidbody2D rigid;
     public float xForce;
     public float yForce;
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     {
         feet = transform.GetChild(0).gameObject;
         trail = transform.GetChild(1).gameObject;
+        playerOrientation = transform.GetChild(2).gameObject;
         rigid = GetComponent<Rigidbody2D>();
         rigid.freezeRotation = true;
         cameraScript = Camera.main.GetComponent<CameraScript>();
@@ -63,19 +65,9 @@ public class PlayerMovement : MonoBehaviour
             cameraScript.setMode(CameraScript.Actions.ZOOMOUT);
             rigid.linearVelocity = new Vector3(rigid.linearVelocity.x, 0, 0);
         }
-        if(xForce > 0)
-        {
-            transform.eulerAngles = new Vector3(0, 0, 0);
-        }
-        else if(xForce < 0)
-        {
-            transform.eulerAngles = new Vector3(0, 180, 0);
-        }
-        Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
-
         if(Keyboard.current.xKey.wasPressedThisFrame && dashCooldown <= 0)
         {
-            rigid.AddForce(new Vector2(transform.right.x * 10, 0), ForceMode2D.Impulse);
+            rigid.AddForce(new Vector2(playerOrientation.transform.right.x * 15, playerOrientation.transform.right.y * 15), ForceMode2D.Impulse);
             //Dashes should reset immediately upon touching the ground and only have the extended cooldown when moving across ground
             if(touchingGround)
             {
@@ -90,6 +82,15 @@ public class PlayerMovement : MonoBehaviour
         {
             dashCooldown -= Time.deltaTime;
         }
+        if(xForce > 0)
+        {
+            transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
+        }
+        else if(xForce < 0)
+        {
+            transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
+        }
+        Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

@@ -3,8 +3,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerOrientation : MonoBehaviour
 {
-    private float xDirection = 0f;
-    private float yDirection = 0f;
+    public float xDirection = 0f;
+    public float yDirection = 0f;
+    public float zDirection = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -33,6 +34,8 @@ public class PlayerOrientation : MonoBehaviour
             yDirection += 1;
         }
         //Mathatan2 considers all quadrants
-        transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(yDirection, xDirection));
+        zDirection = Mathf.Atan2(yDirection, xDirection) * 180 / Mathf.PI;
+        //Change via angle axis instead of eulerangle cuz possible weird interaction
+        transform.rotation = Quaternion.AngleAxis(zDirection, Vector3.forward);
     }
 }
