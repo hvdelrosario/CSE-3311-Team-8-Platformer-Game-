@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpMaxTime = 0.25f;
     public float jumpCurrentTime = 0f;
     public int jumpCharges = 2;
-    public bool dashAvailable = false;
+    public float dashMaxCooldown = 0.25f;
+    public float dashCooldown;
     private bool touchingGround = false;
     private CameraScript cameraScript;
     void Start()
@@ -54,10 +55,6 @@ public class PlayerMovement : MonoBehaviour
             cameraScript.setMode(CameraScript.Actions.ZOOMIN);
             jumpCharges = 2;
         }
-        if(touchingGround)
-        {
-            StartCoroutine(dashCooldown());
-        }
         //#Negate gravity when starting jump
         if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpCharges > 0)
         {
@@ -66,7 +63,6 @@ public class PlayerMovement : MonoBehaviour
             cameraScript.setMode(CameraScript.Actions.ZOOMOUT);
             rigid.linearVelocity = new Vector3(rigid.linearVelocity.x, 0, 0);
         }
-
         if(xForce > 0)
         {
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -77,10 +73,22 @@ public class PlayerMovement : MonoBehaviour
         }
         Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
 
-        if(Keyboard.current.xKey.wasPressedThisFrame && dashAvailable)
+        if(Keyboard.current.xKey.wasPressedThisFrame && dashCooldown <= 0)
         {
             rigid.AddForce(new Vector2(transform.right.x * 10, 0), ForceMode2D.Impulse);
-            dashAvailable = false;
+            //Dashes should reset immediately upon touching the ground and only have the extended cooldown when moving across ground
+            if(touchingGround)
+            {
+                dashCooldown = dashMaxCooldown;
+            }
+            else
+            {
+                dashCooldown = 0.01f;
+            }
+        }
+        if(touchingGround)
+        {
+            dashCooldown -= Time.deltaTime;
         }
     }
 
@@ -112,10 +120,5 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         rigid.AddForce(new Vector2(25 * xForce, 125 * yForce));
-    }
-    public IEnumerator dashCooldown()
-    {
-        yield return new WaitForSeconds(0.5f);
-        dashAvailable = true;
     }
 }
