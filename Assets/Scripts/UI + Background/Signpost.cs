@@ -1,16 +1,28 @@
 using UnityEngine;
 using UnityEngine.InputSystem; 
 using System.Collections;
-
+using System.Collections.Generic;
+using TMPro;
 public class Signpost : MonoBehaviour
 {
     public GameObject dialoguePanel;
+    public TextMeshProUGUI text;
     private Animator anim;
-    private bool touchingPlayer;
+    //Every signpost should have at least one text
+    public List<string> texts;
+    public int textIndex;
+    public bool touchingPlayer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    //Need to put this in awake to be created before adding stuff into the list
+    void Awake()
+    {
+        texts = new List<string>();
+
+    }
     void Start()
     {
         anim = dialoguePanel.GetComponent<Animator>();
+        text = dialoguePanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -20,9 +32,31 @@ public class Signpost : MonoBehaviour
         {
             if(!dialoguePanel.activeSelf)
             {
+                textIndex = 0;
                 dialoguePanel.SetActive(true);
                 anim.Play("DialoguePopUp");
+                if(texts.Count == 0)
+                {
+                    text.SetText("No text assigned to this signpost!");
+                }
+                else
+                {
+                    text.SetText(texts[textIndex]);
+                }
             }
+            else
+            {
+                if(textIndex < texts.Count)
+                {
+                    text.SetText(texts[textIndex]);
+                }
+                else
+                {
+                    anim.Play("DialogueDisappear");
+                    StartCoroutine(hideDialogueBox());
+                }
+            }
+            textIndex += 1;
         }
     }
 
@@ -40,9 +74,12 @@ public class Signpost : MonoBehaviour
         if(collider.gameObject.CompareTag("Player"))
         {
             touchingPlayer = false;
-            anim.Play("DialogueDisappear");
-            StartCoroutine(hideDialogueBox());
-            //Need to delay a bit before calling disappear
+            if(dialoguePanel.activeSelf)
+            {
+                anim.Play("DialogueDisappear");
+                //Need to delay a bit before calling disappear for the animation to play
+                StartCoroutine(hideDialogueBox());
+            }
         }
     }
 
