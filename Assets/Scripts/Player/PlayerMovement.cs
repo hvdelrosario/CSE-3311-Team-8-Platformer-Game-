@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
+        Debug.Log(transform.right);
         xForce = 0;
         yForce = 0;
         if(Keyboard.current.leftArrowKey.isPressed)
@@ -67,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if(Keyboard.current.xKey.wasPressedThisFrame && dashCooldown <= 0)
         {
-            rigid.AddForce(new Vector2(playerOrientation.transform.right.x * 15, playerOrientation.transform.right.y * 15), ForceMode2D.Impulse);
+            rigid.AddForce(new Vector2(playerOrientation.transform.right.x * 10, playerOrientation.transform.right.y * 20), ForceMode2D.Impulse);
             //Dashes should reset immediately upon touching the ground and only have the extended cooldown when moving across ground
             if(touchingGround)
             {
