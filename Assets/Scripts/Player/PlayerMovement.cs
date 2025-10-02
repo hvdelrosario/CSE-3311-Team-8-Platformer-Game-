@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask layers;
     public float jumpMaxTime = 0.25f;
     public float jumpCurrentTime = 0f;
-    public int jumpCharges = 2;
+    public int jumpMaxCharges = 1;
+    public int jumpCharges = 0;
     public float dashMaxCooldown = 0.25f;
     public float dashCooldown;
     private bool touchingGround = false;
@@ -38,7 +39,6 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        Debug.Log(transform.right);
         xForce = 0;
         yForce = 0;
         if(Keyboard.current.leftArrowKey.isPressed)
@@ -53,12 +53,12 @@ public class PlayerMovement : MonoBehaviour
         //Should only check once otherwise jumping inconsistent
         //Additionally should not check while jumping as will give n + 1 jumps
         touchingGround = Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers);
-        if(jumpCurrentTime <= 0 && jumpCharges < 2 && touchingGround)
+        if(jumpCurrentTime <= 0 && jumpCharges < jumpMaxCharges && touchingGround)
         {
             cameraScript.setMode(CameraScript.Actions.ZOOMIN);
-            jumpCharges = 2;
+            jumpCharges = jumpMaxCharges;
         }
-        //#Negate gravity when starting jump
+        //#Negate gravity when starting jump or dashing
         if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpCharges > 0)
         {
             jumpCurrentTime = jumpMaxTime;
@@ -68,7 +68,8 @@ public class PlayerMovement : MonoBehaviour
         }
         if(Keyboard.current.xKey.wasPressedThisFrame && dashCooldown <= 0)
         {
-            rigid.AddForce(new Vector2(playerOrientation.transform.right.x * 10, playerOrientation.transform.right.y * 20), ForceMode2D.Impulse);
+            rigid.linearVelocity = new Vector3(0, 0, 0);
+            rigid.AddForce(new Vector2(playerOrientation.transform.right.x * 15, playerOrientation.transform.right.y * 25), ForceMode2D.Impulse);
             //Dashes should reset immediately upon touching the ground and only have the extended cooldown when moving across ground
             if(touchingGround)
             {
