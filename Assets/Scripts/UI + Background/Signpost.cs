@@ -6,6 +6,7 @@ using TMPro;
 public class Signpost : MonoBehaviour
 {
     public GameObject dialoguePanel;
+    public GameObject spaceKey;
     public TextMeshProUGUI text;
     private Animator anim;
     //Every signpost should have at least one text
@@ -23,6 +24,7 @@ public class Signpost : MonoBehaviour
     {
         anim = dialoguePanel.GetComponent<Animator>();
         text = dialoguePanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+        spaceKey = transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -65,6 +67,7 @@ public class Signpost : MonoBehaviour
     {
         if(collider.gameObject.CompareTag("Player"))
         {
+            spaceKey.SetActive(true);
             touchingPlayer = true;
         }
     }
@@ -74,6 +77,7 @@ public class Signpost : MonoBehaviour
         if(collider.gameObject.CompareTag("Player"))
         {
             touchingPlayer = false;
+            spaceKey.SetActive(false);
             if(dialoguePanel.activeSelf)
             {
                 anim.Play("DialogueDisappear");
