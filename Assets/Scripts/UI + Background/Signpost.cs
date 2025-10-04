@@ -43,14 +43,14 @@ public class Signpost : MonoBehaviour
                 }
                 else
                 {
-                    text.SetText(texts[textIndex]);
+                    StartCoroutine(textAppear(texts[textIndex]));
                 }
             }
             else
             {
                 if(textIndex < texts.Count)
                 {
-                    text.SetText(texts[textIndex]);
+                    StartCoroutine(textAppear(texts[textIndex]));
                 }
                 else
                 {
@@ -91,5 +91,14 @@ public class Signpost : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         dialoguePanel.SetActive(false);
+    }
+
+    public IEnumerator textAppear(string selectedText)
+    {
+        for(int i = 0; i < selectedText.Length; i++)
+        {
+            text.SetText(selectedText.Substring(0, i+1));
+            yield return new WaitForSeconds(0.02f);
+        }
     }
 }

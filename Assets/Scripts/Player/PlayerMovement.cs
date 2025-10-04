@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCurrentTime = 0f;
     public int jumpMaxCharges = 1;
     public int jumpCharges = 0;
-    public float dashMaxCooldown = 0.25f;
+    public float dashMaxCooldown = 0.4f;
     public float dashCooldown;
     private bool touchingGround = false;
     private CameraScript cameraScript;
@@ -69,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
         if(Keyboard.current.xKey.wasPressedThisFrame && dashCooldown <= 0)
         {
             rigid.linearVelocity = new Vector3(0, 0, 0);
+            //Thinking about cutting off jumpforce if dashing so that they're indepdendent, but makes for a cool combo effect if we keep both in, figure it out later
+            jumpCurrentTime = 0;
             rigid.AddForce(new Vector2(playerOrientation.transform.right.x * 15, playerOrientation.transform.right.y * 25), ForceMode2D.Impulse);
             //Dashes should reset immediately upon touching the ground and only have the extended cooldown when moving across ground
             if(touchingGround)
