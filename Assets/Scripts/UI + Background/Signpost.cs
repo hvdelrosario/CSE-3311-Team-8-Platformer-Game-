@@ -13,6 +13,8 @@ public class Signpost : MonoBehaviour
     public List<string> texts;
     public int textIndex;
     public bool touchingPlayer;
+    public bool skipActivated = false;
+    public bool finishedDialogue = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     //Need to put this in awake to be created before adding stuff into the list
     void Awake()
@@ -44,21 +46,38 @@ public class Signpost : MonoBehaviour
                 else
                 {
                     StartCoroutine(textAppear(texts[textIndex]));
+                    textIndex += 1;
                 }
             }
             else
             {
                 if(textIndex < texts.Count)
                 {
-                    StartCoroutine(textAppear(texts[textIndex]));
+                    if(finishedDialogue)
+                    {
+                        StartCoroutine(textAppear(texts[textIndex]));
+                        textIndex += 1;
+                    }
+                    else
+                    {
+                        skipActivated = true;
+                    }
                 }
                 else
                 {
-                    anim.Play("DialogueDisappear");
-                    StartCoroutine(hideDialogueBox());
+                    //Might still be in the middle of the last text, finish it before closing
+                    if(!finishedDialogue)
+                    {
+                        skipActivated = true;
+                    }
+                    else
+                    {
+                        anim.Play("DialogueDisappear");
+                        StartCoroutine(hideDialogueBox());
+                    }
+
                 }
             }
-            textIndex += 1;
         }
     }
 
@@ -97,8 +116,15 @@ public class Signpost : MonoBehaviour
     {
         for(int i = 0; i < selectedText.Length; i++)
         {
+            finishedDialogue = false;
+            if(skipActivated)
+            {
+                i = selectedText.Length - 1;
+                skipActivated = false;
+            }
             text.SetText(selectedText.Substring(0, i+1));
             yield return new WaitForSeconds(0.02f);
         }
+        finishedDialogue = true;
     }
 }

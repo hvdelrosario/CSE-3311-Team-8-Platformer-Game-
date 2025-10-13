@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        generateSignpost(new Vector2(9, 3), new string[] {"Hi how are you", "Ok that's good"});
+        generateSignpost(new Vector2(-12, 0.58f), new string[] {"Hello.", "You came from out of nowhere... Let's get you moving.", "Use your left and right arrow keys to move around."});
     }
 
     // Update is called once per frame
