@@ -106,6 +106,10 @@ public class PlayerMovement : MonoBehaviour
         {
             rigid.AddForce(new Vector2(-transform.right.x * 10, 10), ForceMode2D.Impulse);
         }
+        if(collision.gameObject.CompareTag("Spring"))
+        {
+            rigid.AddForce(collision.gameObject.transform.up * 35, ForceMode2D.Impulse);
+        }
     }
     //Use fixed update for physics that are not impulses (as well as any timers that uses it)!
     void FixedUpdate()

@@ -29,6 +29,7 @@ public class PlayerStats : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        //Note do this to get a child of a collision
         Collider2D targetArea = collision.GetContact(0).collider;
         // Debug.Log(targetArea.gameObject.name);
         if(targetArea.gameObject.CompareTag("EnemyHitbox"))
@@ -44,4 +45,6 @@ public class PlayerStats : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         sprite.color = Color.white;
     }
+
+
 }
