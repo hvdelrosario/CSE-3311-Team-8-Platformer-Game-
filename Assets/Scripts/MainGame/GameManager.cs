@@ -33,13 +33,14 @@ public class GameManager : MonoBehaviour
         generateSignpost(new Vector2(-4, 0.58f), new string[] {"A gap. Should be no problem however.", "Use the up arrow key in order to jump over the gap."});
         generateSignpost(new Vector2(27, 4.58f), new string[] {"Alright. This one's a bit bigger than before.", "You can boost in any direction with the x key. Try it out on this."});
         generateSignpost(new Vector2(22, 4.58f), new string[] {"See that yellow platform over there? Run over it to activate the checkpoint and save your progress.", "When you respawn, you'll respawn at the last saved checkpoint."});
-        
+        generateSignpost(new Vector2(88.5f, 16.58f), new string[] {"Congratulations on completing the tutorial! Moving onto the next level."});
+
         mostRecentCheckpoint = -1;
         generateCheckpoint(new Vector2(24.5f, 3.125f));
         
         Instantiate(spring, new Vector2(61.5f, 16.58f), Quaternion.Euler(0, 0, 0));
 
-        
+
         Instantiate(background, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
         //In world space, 100 pixels per unit currently
         Instantiate(background, new Vector3(-19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
