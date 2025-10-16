@@ -14,8 +14,9 @@ public class Background : MonoBehaviour
     void LateUpdate()
     {
         //Backgrounds should slightly follow the camera to a fraction of the distance away
+        //Note we want the backgrounds at the very back
         finalX = initialX + (Camera.main.transform.position.x * 0.75f);
-        transform.position = new Vector3(finalX, Camera.main.transform.position.y, 0);
+        transform.position = new Vector3(finalX, Camera.main.transform.position.y, 10);
         //1920 * 2 screens away, need to shift 1920 * 3 screens away hwoever
         if((transform.position.x - Camera.main.transform.position.x) > 38.40f)
         {
