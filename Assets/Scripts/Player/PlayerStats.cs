@@ -9,7 +9,8 @@ public class PlayerStats : MonoBehaviour
     public int maxHealth;
     private Rigidbody2D rigid;
     private SpriteRenderer sprite;
-
+    public GameObject gameManager;
+    public Vector3 respawnCoordinate;
     void Awake()
     {
         playerHealth = 5;
@@ -40,10 +41,21 @@ public class PlayerStats : MonoBehaviour
         // Debug.Log(targetArea.gameObject.name);
         if(targetArea.gameObject.CompareTag("EnemyHitbox"))
         {
-           StartCoroutine(gotHit());
+            StartCoroutine(gotHit());
+        }
+        else if(collision.gameObject.CompareTag("Checkpoint"))
+        {
+            gameManager.GetComponent<GameManager>().updateCheckpoint(collision.gameObject);
         }
     }
 
+    public void OnTriggerEnter2D(Collider2D collider)
+    {
+        if(collider.gameObject.CompareTag("DeathZone"))
+        {
+            StartCoroutine(fallenOff());
+        }
+    }
     public IEnumerator gotHit()
     {
         playerHealth -= 1;
@@ -52,5 +64,20 @@ public class PlayerStats : MonoBehaviour
         sprite.color = Color.white;
     }
 
-
+    public IEnumerator fallenOff()
+    {
+        playerHealth -= 1;
+        if(gameManager.GetComponent<GameManager>().mostRecentCheckpoint == -1)
+        {
+            respawnCoordinate = gameManager.GetComponent<GameManager>().startPosition;
+        }
+        else
+        {
+            respawnCoordinate = gameManager.GetComponent<GameManager>().checkpoints[gameManager.GetComponent<GameManager>().mostRecentCheckpoint].transform.position;
+        }
+        //Accounting for player clipping into the checkpoint
+        respawnCoordinate += new Vector3(0, 0.5f, 0);
+        transform.position = respawnCoordinate;
+        yield return null;
+    }
 }

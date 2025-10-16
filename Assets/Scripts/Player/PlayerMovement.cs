@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown;
     private bool touchingGround = false;
     private CameraScript cameraScript;
+    public Animator anim;
     void Start()
     {
         feet = transform.GetChild(0).gameObject;
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         rigid.freezeRotation = true;
         cameraScript = Camera.main.GetComponent<CameraScript>();
+        anim = GetComponent<Animator>();
     }
     void OnEnable()
     {
@@ -95,6 +97,22 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
         }
         Debug.DrawRay(feet.transform.position, -feet.transform.up * 0.01f, Color.red, 1);
+
+        if(touchingGround)
+        {
+            if(rigid.linearVelocity.x > 0.1f || rigid.linearVelocity.x < -0.1f)
+            {
+                anim.Play("PlayerWalk");
+            }
+            else
+            {
+                anim.Play("New State");
+            }
+        }
+        else
+        {
+            anim.Play("Airbound");
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
