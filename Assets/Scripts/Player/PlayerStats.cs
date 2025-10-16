@@ -5,13 +5,19 @@ using UnityEngine.InputSystem;
 
 public class PlayerStats : MonoBehaviour
 {
-    public float playerHealth;
+    public int playerHealth;
+    public int maxHealth;
     private Rigidbody2D rigid;
     private SpriteRenderer sprite;
+
+    void Awake()
+    {
+        playerHealth = 5;
+        maxHealth = 5;
+    }
     void Start()
     {
-        sprite = GetComponent<SpriteRenderer>();
-        playerHealth = 10;
+        sprite = GetComponent<SpriteRenderer>();;
     }
 
     // Update is called once per frame
