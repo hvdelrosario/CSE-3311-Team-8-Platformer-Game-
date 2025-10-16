@@ -18,7 +18,7 @@ public class CameraScript : MonoBehaviour
     {
         if(action == Actions.ZOOMIN)
         {
-            zoomIn(4.9f);
+            zoomIn(4.95f);
         }
         else if(action == Actions.ZOOMOUT)
         {

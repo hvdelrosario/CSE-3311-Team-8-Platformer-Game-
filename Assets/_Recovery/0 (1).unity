@@ -3393,7 +3393,8 @@ MonoBehaviour:
   signpost: {fileID: 7841162811126756820, guid: ddd78712c92fbd5479f5c5cbf8106816, type: 3}
   dialogueBox: {fileID: 729523599}
   spring: {fileID: 4034920083606338484, guid: 4752ca4ae09d4634b9f2c6836ddfb841, type: 3}
-  background: {fileID: 1784268409284895077, guid: 8735d743ec9f1904abb36fdb4bc3e5c3, type: 3}
+  background: {fileID: 2201034070208183424, guid: 8735d743ec9f1904abb36fdb4bc3e5c3, type: 3}
+  canvas: {fileID: 25926864}
 --- !u!4 &521676589
 Transform:
   m_ObjectHideFlags: 0
