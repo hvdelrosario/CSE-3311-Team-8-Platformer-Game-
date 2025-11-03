@@ -27,9 +27,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         startPosition = new Vector3(-12, 3.5f, 0);
-        if (DataPersistenceManager.instance == null)
+        if (DataPersistenceManager.instance == null || !DataPersistenceManager.instance.IsFileLoaded())
         {
             player.transform.position = startPosition;
+            playerScript.playerHealth = playerScript.maxHealth;
+        }
+
+        else
+        {
+            Debug.Log("FILE DOES EXIST!!!!!!!!!!!!!");
         }
         generateSignpost(new Vector2(-12, 0.58f), new string[] {"Hello.", "You came from out of nowhere... Let's get you moving.", "Use your left and right arrow keys to move around."});
         generateSignpost(new Vector2(-4, 0.58f), new string[] {"A gap. Should be no problem however.", "Use the up arrow key in order to jump over the gap."});
@@ -54,6 +60,12 @@ public class GameManager : MonoBehaviour
             GameObject generatedHeart = Instantiate(heart, new Vector3(-800 + 150 * i, 400, 0), Quaternion.Euler(0, 0, 0));
             generatedHeart.transform.SetParent(canvas.transform, false);
             hearts.Add(generatedHeart);
+        }
+
+        // Update initial heart display based on current health
+        for(int i = playerScript.maxHealth - 1; i >= playerScript.playerHealth; i--)
+        {
+            hearts[i].GetComponent<Animator>().Play("HeartLost");
         }
     }
 

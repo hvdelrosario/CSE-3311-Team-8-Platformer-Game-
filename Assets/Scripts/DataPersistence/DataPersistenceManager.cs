@@ -8,8 +8,10 @@ public class DataPersistenceManager : MonoBehaviour
 {
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
+    [SerializeField] private bool useEncryption;
 
     private GameData gameData;
+    private bool fileLoaded = false; 
 
     private List<IDataPersistence> dataPersistenceObjects;
 
@@ -29,7 +31,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Start()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
     }
@@ -42,11 +44,16 @@ public class DataPersistenceManager : MonoBehaviour
     public void LoadGame()
     {
         this.gameData = dataHandler.Load();
-        
+
         if (this.gameData == null)
         {
             Debug.LogWarning("No game data found. A new game needs to be started before data can be loaded.");
             NewGame();
+        }
+        else
+        {
+            fileLoaded = true;
+        
         }
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
@@ -69,10 +76,15 @@ public class DataPersistenceManager : MonoBehaviour
         SaveGame();
 
     }
-    
+
     private List<IDataPersistence> FindAllDataPersistenceObjects()
     {
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<IDataPersistence>();
         return new List<IDataPersistence>(dataPersistenceObjects);
+    }
+    
+    public bool IsFileLoaded()
+    {
+        return fileLoaded;
     }
 }

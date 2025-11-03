@@ -84,9 +84,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         this.transform.position = data.playerPosition;
+        this.playerHealth = data.playerHealth;
     }
     public void SaveData(ref GameData data)
     {
         data.playerPosition = this.transform.position;
+        data.playerHealth = this.playerHealth;
     }
 }
