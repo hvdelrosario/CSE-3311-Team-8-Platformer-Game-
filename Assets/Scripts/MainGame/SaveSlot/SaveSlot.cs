@@ -33,14 +33,12 @@ public class SaveSlot : MonoBehaviour
             hasData = false;
             noDataContent.SetActive(true);
             hasDataContent.SetActive(false);
-            clearButton.interactable = false;
         }
         else
         {
             hasData = true;
             noDataContent.SetActive(false);
             hasDataContent.SetActive(true);
-            clearButton.interactable = true;
 
             heartsText.text = data.playerHealth.ToString();
         }

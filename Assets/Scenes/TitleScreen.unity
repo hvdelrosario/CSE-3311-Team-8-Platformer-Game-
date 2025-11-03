@@ -1334,7 +1334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9f74830bea987428a3a776fd9032d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveSlot
-  profileId: test
+  profileId: 
   noDataContent: {fileID: 909955149}
   hasDataContent: {fileID: 817692915}
   heartsText: {fileID: 711533012}

@@ -47,6 +47,7 @@ public class SaveSlotsMenu : Menu
     public void ActivateMenu()
     {
         this.gameObject.SetActive(true);
+        mainMenu.DeactivateMenu();
 
         Dictionary<string, GameData> profilesGameData = DataPersistenceManager.instance.GetAllProfilesGameData();
         foreach (SaveSlot saveSlot in saveSlots)
