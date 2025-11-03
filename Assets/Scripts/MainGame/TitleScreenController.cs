@@ -7,17 +7,25 @@ public class TitleScreenController : Menu
     [SerializeField] private SaveSlotsMenu saveSlotsMenu;
     [SerializeField] private Button newGameButton;
     [SerializeField] private Button continueButton;
+    [SerializeField] private Button loadGameButton;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
         if(!DataPersistenceManager.instance.HasGameData())
         {
             continueButton.interactable = false;
+            loadGameButton.interactable = false; 
         }
     }
     public void OnNewGameClicked(string sceneName)
     {
-        saveSlotsMenu.ActivateMenu();
+        saveSlotsMenu.ActivateMenu(false);
+        this.DeactivateMenu();
+    }
+
+    public void OnLoadGameClicked(string sceneName)
+    {
+        saveSlotsMenu.ActivateMenu(true);
         this.DeactivateMenu();
     }
 

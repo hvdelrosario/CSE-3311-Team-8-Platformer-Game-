@@ -5,6 +5,7 @@ using System.Collections;
 [System.Serializable]
 public class GameData
 {
+    public long lastUpdated;
     public Vector3 playerPosition;
     public int playerHealth;
     public int checkpointID;
