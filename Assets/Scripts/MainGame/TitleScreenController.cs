@@ -11,12 +11,18 @@ public class TitleScreenController : Menu
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-        if(!DataPersistenceManager.instance.HasGameData())
+        DisableButtonsDependingOnData();
+    }
+
+    private void DisableButtonsDependingOnData()
+    {
+        if (!DataPersistenceManager.instance.HasGameData())
         {
             continueButton.interactable = false;
-            loadGameButton.interactable = false; 
+            loadGameButton.interactable = false;
         }
     }
+    
     public void OnNewGameClicked(string sceneName)
     {
         saveSlotsMenu.ActivateMenu(false);
@@ -32,6 +38,8 @@ public class TitleScreenController : Menu
     public void OnContinueClicked(string sceneName)
     {
         DisableMenuButtons();
+
+        DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadSceneAsync(sceneName);
     }
 
@@ -49,6 +57,7 @@ public class TitleScreenController : Menu
     public void ActivateMenu() 
     {
         this.gameObject.SetActive(true);
+        DisableButtonsDependingOnData();
     }
 
     public void DeactivateMenu() 

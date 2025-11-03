@@ -4,6 +4,7 @@ using System.Collections;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using System.Security.Cryptography;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -48,25 +49,17 @@ public class DataPersistenceManager : MonoBehaviour
 
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
 
-        this.selectedProfileId = dataHandler.GetMostRecentlyUpdatedProfileId();
-
-        if (overrideProfileId)
-        {
-            this.selectedProfileId = testSelectedProfileId;
-            Debug.Log("Overriding selected profile ID to: " + this.selectedProfileId);
-        }
+        InitializeSelectedProfileId();
     }
 
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -75,17 +68,29 @@ public class DataPersistenceManager : MonoBehaviour
         LoadGame();
     }
 
-    public void OnSceneUnloaded(Scene scene)
-    {
-        SaveGame();
-    }
-
     public void ChangeSelectedProfileId(string newProfileId) 
     {
         // update the profile to use for saving and loading
         this.selectedProfileId = newProfileId;
         // load the game, which will use that profile, updating our game data accordingly
         LoadGame();
+    }
+
+    public void DeleteProfileData(string profileId)
+    {
+        dataHandler.Delete(profileId);
+        InitializeSelectedProfileId();
+        LoadGame();
+    }
+
+    public void InitializeSelectedProfileId()
+    {
+        this.selectedProfileId = dataHandler.GetMostRecentlyUpdatedProfileId();
+        if (overrideProfileId)
+        {
+            this.selectedProfileId = testSelectedProfileId;
+            Debug.Log("Overriding selected profile ID to: " + this.selectedProfileId);
+        }
     }
 
     public void NewGame()

@@ -15,6 +15,7 @@ public class SaveSlot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI heartsText;
 
     [Header("Clear Data Button")]
+    [SerializeField] private Button clearDataButton;
 
     public bool hasData { get; private set; } = false;
 
@@ -32,12 +33,14 @@ public class SaveSlot : MonoBehaviour
             hasData = false;
             noDataContent.SetActive(true);
             hasDataContent.SetActive(false);
+            clearDataButton.interactable = false;
         }
         else
         {
             hasData = true;
             noDataContent.SetActive(false);
             hasDataContent.SetActive(true);
+            clearDataButton.interactable = true;
 
             heartsText.text = data.playerHealth.ToString();
         }
@@ -51,6 +54,7 @@ public class SaveSlot : MonoBehaviour
     public void SetInteractable(bool interactable)
     {
         saveSlotButton.interactable = interactable;
+        clearDataButton.interactable = interactable;
     }
 
 }

@@ -30,8 +30,10 @@ public class SaveSlotsMenu : Menu
         if (!isLoadingGame)
         {
             DataPersistenceManager.instance.NewGame();
-
         }
+
+        DataPersistenceManager.instance.SaveGame();
+
         SceneManager.LoadSceneAsync("Sandbox_Movement");
     }
     private void SaveGameAndLoadScene()
@@ -40,7 +42,8 @@ public class SaveSlotsMenu : Menu
 
     public void OnClearClicked(SaveSlot saveSlot)
     {
-        
+        DataPersistenceManager.instance.DeleteProfileData(saveSlot.GetProfileId());
+        ActivateMenu(isLoadingGame);
     } 
 
     public void OnBackClicked()
