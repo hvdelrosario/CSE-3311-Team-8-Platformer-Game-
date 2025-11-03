@@ -83,7 +83,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        this.transform.position = data.playerPosition;
+        // Only set position from saved data if it's not a zero vector (indicating a new game)
+        if (data.playerPosition != Vector3.zero)
+        {
+            this.transform.position = data.playerPosition;
+        }
         this.playerHealth = data.playerHealth;
     }
     public void SaveData(ref GameData data)

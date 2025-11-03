@@ -15,7 +15,6 @@ public class SaveSlot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI heartsText;
 
     [Header("Clear Data Button")]
-    [SerializeField] private Button clearButton;
 
     public bool hasData { get; private set; } = false;
 

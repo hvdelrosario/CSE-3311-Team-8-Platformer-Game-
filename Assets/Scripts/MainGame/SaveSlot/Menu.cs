@@ -11,13 +11,11 @@ public class Menu : MonoBehaviour
 
     protected virtual void OnEnable() 
     {
-        StartCoroutine(SetFirstSelected(firstSelected));
+        SetFirstSelected(firstSelected);
     }
 
-    public IEnumerator SetFirstSelected(Button firstSelectedButton) 
+    public void SetFirstSelected(Button firstSelectedButton) 
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        yield return new WaitForEndOfFrame();
-        EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
+        firstSelectedButton.Select();
     }
 }

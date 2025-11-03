@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Data.Common;
 
 public class FileDataHandler
 {
@@ -55,7 +56,13 @@ public class FileDataHandler
 
     public void Save(GameData data, string profileId)
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        if (profileId == null)
+        {
+            Debug.LogError("Tried to save game data for null profile id");
+            return;
+        }
+        
+        string fullPath = Path.Combine(dataDirPath, profileId, dataFileName);
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
