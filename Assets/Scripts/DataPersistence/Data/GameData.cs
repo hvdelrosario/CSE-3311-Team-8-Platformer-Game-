@@ -13,4 +13,6 @@ public class GameData
         playerPosition = Vector3.zero;
         playerHealth = 0;
     }
+
+    
 }
