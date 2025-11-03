@@ -27,8 +27,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         startPosition = new Vector3(-12, 3.5f, 0);
-        player.transform.position = startPosition;
-
+        if (DataPersistenceManager.instance == null)
+        {
+            player.transform.position = startPosition;
+        }
         generateSignpost(new Vector2(-12, 0.58f), new string[] {"Hello.", "You came from out of nowhere... Let's get you moving.", "Use your left and right arrow keys to move around."});
         generateSignpost(new Vector2(-4, 0.58f), new string[] {"A gap. Should be no problem however.", "Use the up arrow key in order to jump over the gap."});
         generateSignpost(new Vector2(27, 4.58f), new string[] {"Alright. This one's a bit bigger than before.", "You can boost in any direction with the x key. Try it out on this."});

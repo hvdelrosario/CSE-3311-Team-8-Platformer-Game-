@@ -122,16 +122,18 @@ public class PlayerMovement : MonoBehaviour
         //This is how we detect the zombie head instead of the entire zomzbie
         Collider2D targetArea = collision.GetContact(0).collider;
         // Debug.Log(targetArea.gameObject.name);
-        if(targetArea.gameObject.CompareTag("EnemyHitbox"))
+        if (targetArea.gameObject.CompareTag("EnemyHitbox"))
         {
             rigid.AddForce(new Vector2(-transform.right.x * 10, 10), ForceMode2D.Impulse);
         }
-        if(collision.gameObject.CompareTag("Spring"))
+        if (collision.gameObject.CompareTag("Spring"))
         {
             rigid.AddForce(collision.gameObject.transform.up * 35, ForceMode2D.Impulse);
         }
     }
     //Use fixed update for physics that are not impulses (as well as any timers that uses it)!
+
+
     void FixedUpdate()
     {
         //Only consume jump time when up arrow pressed and in the process of jumping

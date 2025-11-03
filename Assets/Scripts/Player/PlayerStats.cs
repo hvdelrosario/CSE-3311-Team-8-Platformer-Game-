@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem; 
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour, IDataPersistence
 {
     public int playerHealth;
     public int maxHealth;
@@ -67,7 +67,7 @@ public class PlayerStats : MonoBehaviour
     public IEnumerator fallenOff()
     {
         playerHealth -= 1;
-        if(gameManager.GetComponent<GameManager>().mostRecentCheckpoint == -1)
+        if (gameManager.GetComponent<GameManager>().mostRecentCheckpoint == -1)
         {
             respawnCoordinate = gameManager.GetComponent<GameManager>().startPosition;
         }
@@ -79,5 +79,14 @@ public class PlayerStats : MonoBehaviour
         respawnCoordinate += new Vector3(0, 0.5f, 0);
         transform.position = respawnCoordinate;
         yield return null;
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.transform.position = data.playerPosition;
+    }
+    public void SaveData(ref GameData data)
+    {
+        data.playerPosition = this.transform.position;
     }
 }
