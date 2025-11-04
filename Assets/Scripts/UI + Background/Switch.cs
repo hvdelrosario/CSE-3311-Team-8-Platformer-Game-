@@ -3,6 +3,8 @@ using UnityEngine;
 public class Switch : MonoBehaviour
 {
     public GameObject gate;
+    private SpriteRenderer sprite;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -18,6 +20,7 @@ public class Switch : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             gate.transform.GetChild(0).GetComponent<Gate>().activateGate();
+            sprite.color = Color.red;
         }
     }
 }

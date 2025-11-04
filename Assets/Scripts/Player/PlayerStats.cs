@@ -55,6 +55,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
         {
             StartCoroutine(fallenOff());
         }
+        else if(collider.gameObject.CompareTag("Powerup"))
+        {
+            gameManager.GetComponent<GameManager>().timePassed -= collider.gameObject.GetComponent<TimerPowerup>().timeCut;
+            Destroy(collider.gameObject);
+        }
     }
     public IEnumerator gotHit()
     {

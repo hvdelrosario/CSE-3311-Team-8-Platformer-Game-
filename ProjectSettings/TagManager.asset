@@ -9,6 +9,7 @@ TagManager:
   - DeathZone
   - Checkpoint
   - Spikes
+  - Powerup
   layers:
   - Default
   - TransparentFX

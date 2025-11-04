@@ -34,6 +34,7 @@ public class Signpost : MonoBehaviour
     {
         if(Keyboard.current.spaceKey.wasPressedThisFrame && touchingPlayer)
         {
+            Time.timeScale = 0f;  
             if(!dialoguePanel.activeSelf)
             {
                 textIndex = 0;
@@ -110,6 +111,7 @@ public class Signpost : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         dialoguePanel.SetActive(false);
+        Time.timeScale = 1f;  
     }
 
     public IEnumerator textAppear(string selectedText)
