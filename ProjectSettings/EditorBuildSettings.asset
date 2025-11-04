@@ -12,8 +12,14 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScreen.unity
     guid: 9208f67c2579a494ea55e18a5a3d45af
   - enabled: 1
-    path: Assets/Scenes/Sandbox_Movement.unity
+    path: Assets/Scenes/TutorialLevel.unity
     guid: 069c70cdfe4d8dd40ae6a52fcb00f19d
+  - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: e070a70a62462544390b75107c0d51ff
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: aaebf27b6f791854799d135b67c5415e
   - enabled: 1
     path: Assets/Scenes/EndScreen.unity
     guid: 964bf23258a72b441b3d9e89cb791014

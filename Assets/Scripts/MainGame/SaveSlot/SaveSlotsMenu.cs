@@ -58,7 +58,7 @@ public class SaveSlotsMenu : Menu
     private void SaveGameAndLoadScene()
     {
         DataPersistenceManager.instance.SaveGame();
-        SceneManager.LoadSceneAsync("Sandbox_Movement");
+        SceneManager.LoadSceneAsync("TutorialLevel");
     }
 
     public void OnClearClicked(SaveSlot saveSlot)

@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         //If touching ground, jump and dash is available
         //Should only check once otherwise jumping inconsistent
         //Additionally should not check while jumping as will give n + 1 jumps
-        Debug.Log(GetComponent<BoxCollider2D>().bounds.size.x);
+        // Debug.Log(GetComponent<BoxCollider2D>().bounds.size.x);
         //The -0.02f is to prevent hopping up corners of walls
         touchingGround = Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x - 0.02f, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers);
         if(jumpCurrentTime <= 0 && jumpCharges < jumpMaxCharges && touchingGround)

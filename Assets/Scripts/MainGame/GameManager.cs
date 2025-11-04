@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem; 
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 public class GameManager : MonoBehaviour, IDataPersistence
@@ -11,6 +13,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public GameObject player;
     public GameObject canvas;
     public GameObject checkpoint;
+    public GameObject theSwitch;
+    public GameObject gate;
+    public GameObject pauseMenu;
     private PlayerStats playerScript;
     public int currentLives;
     private List<GameObject> hearts;
@@ -95,6 +100,19 @@ public class GameManager : MonoBehaviour, IDataPersistence
             }
         }
         currentLives = playerScript.playerHealth;
+
+        if(Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
+        }
+        if(pauseMenu.activeSelf)
+        {
+            Time.timeScale = 0f;  
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     private void generateSignpost(Vector2 location, string[] textToInsert)
@@ -125,5 +143,17 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             checkpoint.GetComponent<Checkpoint>().activateCheckpoint();
         }
+    }
+
+    private void generateSwitchGate(Vector2 switchLocation, Vector2 gateLocation)
+    {
+        GameObject tempSwitch = Instantiate(theSwitch, switchLocation, Quaternion.Euler(0, 0, 0));
+        GameObject tempGate = Instantiate(gate, gateLocation, Quaternion.Euler(0, 0, 0));
+        tempSwitch.GetComponent<Switch>().gate = tempGate;
+    }
+
+    public void exitToTitleScreen()
+    {
+        SceneManager.LoadScene("TitleScreen");
     }
 }

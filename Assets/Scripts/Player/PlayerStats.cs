@@ -30,7 +30,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
         }
         if(Keyboard.current.rKey.wasPressedThisFrame)
         {
-            SceneManager.LoadScene("Sandbox_Movement");
+            SceneManager.LoadScene("TutorialLevel");
         }
     }
 
