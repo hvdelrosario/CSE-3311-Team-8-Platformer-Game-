@@ -51,7 +51,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if(collider.gameObject.CompareTag("DeathZone"))
+        if(collider.gameObject.CompareTag("DeathZone") || collider.gameObject.CompareTag("Spikes"))
         {
             StartCoroutine(fallenOff());
         }

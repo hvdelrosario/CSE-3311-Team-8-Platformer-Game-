@@ -8,6 +8,7 @@ TagManager:
   - Spring
   - DeathZone
   - Checkpoint
+  - Spikes
   layers:
   - Default
   - TransparentFX

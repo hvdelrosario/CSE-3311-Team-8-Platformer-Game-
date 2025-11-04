@@ -17,7 +17,7 @@ public class Switch : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            gate.GetComponent<Gate>().activateGate();
+            gate.transform.GetChild(0).GetComponent<Gate>().activateGate();
         }
     }
 }

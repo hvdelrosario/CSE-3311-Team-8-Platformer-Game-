@@ -128,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Spring"))
         {
-            rigid.AddForce(collision.gameObject.transform.up * 35, ForceMode2D.Impulse);
+            rigid.AddForce(collision.gameObject.transform.up * 40, ForceMode2D.Impulse);
         }
     }
     //Use fixed update for physics that are not impulses (as well as any timers that uses it)!
