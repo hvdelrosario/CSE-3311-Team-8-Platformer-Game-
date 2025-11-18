@@ -47023,8 +47023,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: fdsafdsa
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1e156d8ff8175514ea9800fbd168447f, type: 2}
+  m_sharedMaterial: {fileID: 2967075198803838034, guid: 1e156d8ff8175514ea9800fbd168447f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -47462,10 +47462,10 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 128
-  jumpMaxTime: 0.5
-  jumpCurrentTime: 0.5
-  jumpMaxCharges: 3
-  jumpCharges: 3
+  jumpMaxTime: 0.25
+  jumpCurrentTime: 0
+  jumpMaxCharges: 1
+  jumpCharges: 0
   dashMaxCooldown: 0.25
   dashCooldown: 0
   anim: {fileID: 0}
