@@ -19,6 +19,18 @@ public class Goal : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
+            // Save current game state (including timer) before transitioning
+            if (DataPersistenceManager.instance != null && DataPersistenceManager.instance.HasGameData())
+            {
+                // First save the current state (timer, health, etc.)
+                DataPersistenceManager.instance.SaveGame();
+                Debug.Log("Saved game before level transition");
+                
+                // Then reset position for new level (keeps timer intact)
+                DataPersistenceManager.instance.ResetPositionForNewLevel();
+            }
+            
+            Debug.Log("Level complete - transitioning to next level");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }

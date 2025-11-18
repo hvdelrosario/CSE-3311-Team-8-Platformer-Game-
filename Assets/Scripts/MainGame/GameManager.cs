@@ -32,24 +32,41 @@ public class GameManager : MonoBehaviour, IDataPersistence
         playerScript = player.GetComponent<PlayerStats>();
         hearts = new List<GameObject>();
         checkpoints = new List<GameObject>();
+        mostRecentCheckpoint = -1; // Default value, will be overridden by LoadData if save exists
+        
+        // Set start position based on current scene (MUST be in Awake before LoadData is called)
+        string currentScene = SceneManager.GetActiveScene().name;
+        if(currentScene == "TutorialLevel")
+        {
+            startPosition = new Vector3(-12, 3.5f, 0);
+        }
+        else if(currentScene == "Level1")
+        {
+            startPosition = new Vector3(-12, 3.5f, 0);
+        }
+        else if(currentScene == "Level2")
+        {
+            startPosition = new Vector3(-12, 3.2f, 0);
+        }
+        else
+        {
+            startPosition = new Vector3(-12, 3.5f, 0); // Default
+        }
+        
+        Debug.Log("Awake: Scene " + currentScene + " start position set to " + startPosition);
     }
     void Start()
     {
         Time.timeScale = 1f;
-        startPosition = new Vector3(-12, 3.5f, 0);
-        timePassed = 0f;
-        if (DataPersistenceManager.instance == null || !DataPersistenceManager.instance.IsFileLoaded())
+        
+        // Only reset timer for new games, LoadData will set it for existing saves
+        if (DataPersistenceManager.instance == null || !DataPersistenceManager.instance.HasGameData())
         {
-            player.transform.position = startPosition;
-            playerScript.playerHealth = playerScript.maxHealth;
-            mostRecentCheckpoint = -1;
+            timePassed = 0f;
         }
-        else
-        {
-            Debug.Log("FILE DOES EXIST!!!!!!!!!!!!!");
-            // The checkpoint will be loaded via LoadData
-        }
-        currentLives = playerScript.playerHealth;
+        // timePassed will be loaded from save data in LoadData if it exists
+        
+        // Load scene-specific assets to populate checkpoints list
         if(SceneManager.GetActiveScene().name == "TutorialLevel")
         {
             loadTutorialLevelAssets();
@@ -58,6 +75,26 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             loadLevel1Assets();
         }
+        else if(SceneManager.GetActiveScene().name == "Level2")
+        {
+            loadLevel2Assets();
+        }
+        
+        Debug.Log("Start() completed. Scene: " + SceneManager.GetActiveScene().name + ", Start position: " + startPosition + ", Checkpoints in list: " + checkpoints.Count);
+        
+        // Initialize values for new games only
+        if (DataPersistenceManager.instance == null || !DataPersistenceManager.instance.HasGameData())
+        {
+            playerScript.playerHealth = playerScript.maxHealth;
+            mostRecentCheckpoint = -1;
+            Debug.Log("New game - mostRecentCheckpoint set to -1");
+        }
+        else
+        {
+            Debug.Log("Existing save - mostRecentCheckpoint will be loaded from save data");
+        }
+        
+        currentLives = playerScript.playerHealth;
 
 
         for(int i = 0; i < playerScript.maxHealth; i++)
@@ -77,17 +114,49 @@ public class GameManager : MonoBehaviour, IDataPersistence
     // IDataPersistence implementation
     public void LoadData(GameData data)
     {
+        Debug.Log("LoadData called. CheckpointID: " + data.checkpointID + ", PlayerPosition: " + data.playerPosition + ", Scene: " + data.currentSceneName + ", Checkpoints available: " + checkpoints.Count + ", TimePassed: " + data.timePassed);
+        
         mostRecentCheckpoint = data.checkpointID;
-        // If checkpoint is valid, respawn player at checkpoint
+        timePassed = data.timePassed; // Load saved timer
+        
+        // Activate the checkpoint visually if one exists
         if (mostRecentCheckpoint != -1 && mostRecentCheckpoint < checkpoints.Count)
         {
-            player.transform.position = checkpoints[mostRecentCheckpoint].transform.position + new Vector3(0, 0.5f, 0);
+            checkpoints[mostRecentCheckpoint].GetComponent<Checkpoint>().activateCheckpoint();
+            Debug.Log("Activated checkpoint " + mostRecentCheckpoint);
+        }
+        
+        // Spawn at exact saved position if it exists, otherwise use checkpoint or start position
+        if (data.playerPosition != Vector3.zero)
+        {
+            player.transform.position = data.playerPosition;
+            Debug.Log("Spawned at saved position: " + data.playerPosition);
+        }
+        else if (mostRecentCheckpoint != -1 && mostRecentCheckpoint < checkpoints.Count)
+        {
+            Vector3 checkpointPos = checkpoints[mostRecentCheckpoint].transform.position + new Vector3(0, 0.5f, 0);
+            player.transform.position = checkpointPos;
+            Debug.Log("Spawned at checkpoint " + mostRecentCheckpoint + " at position: " + checkpointPos);
+        }
+        else
+        {
+            // No checkpoint saved or invalid checkpoint, use start position
+            if (startPosition == Vector3.zero)
+            {
+                startPosition = new Vector3(-12, 3.5f, 0);
+            }
+            player.transform.position = startPosition;
+            Debug.Log("Spawned at start position: " + startPosition + " (no saved position or checkpoint)");
         }
     }
 
     public void SaveData(ref GameData data)
     {
         data.checkpointID = mostRecentCheckpoint;
+        data.currentSceneName = SceneManager.GetActiveScene().name;
+        data.playerPosition = player.transform.position;
+        data.timePassed = timePassed; // Save current timer
+        Debug.Log("SaveData: Saving checkpoint " + mostRecentCheckpoint + " in scene " + data.currentSceneName + " at position " + data.playerPosition + ", timer: " + timePassed);
     }
 
     // Update is called once per frame
@@ -116,6 +185,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             Time.timeScale = 1f;
         }
+        
+        // Manual save for testing (press P key)
+        if(Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            if (DataPersistenceManager.instance != null)
+            {
+                DataPersistenceManager.instance.SaveGame();
+                Debug.Log("Game manually saved! Checkpoint: " + mostRecentCheckpoint);
+            }
+        }
     }
 
     private void generateSignpost(Vector2 location, string[] textToInsert)
@@ -141,6 +220,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
         if(checkpoint.GetComponent<Checkpoint>().checkPointID > mostRecentCheckpoint)
         {
             mostRecentCheckpoint = checkpoint.GetComponent<Checkpoint>().checkPointID;
+            // Auto-save when reaching a new checkpoint
+            if (DataPersistenceManager.instance != null)
+            {
+                DataPersistenceManager.instance.SaveGame();
+                Debug.Log("Checkpoint " + mostRecentCheckpoint + " saved!");
+            }
         }
         if(!checkpoint.GetComponent<Checkpoint>().activated)
         {
@@ -215,6 +300,14 @@ public class GameManager : MonoBehaviour, IDataPersistence
         generatetimerPowerup(new Vector2(110f, 19.5f), 25f);
 
 
+        Instantiate(background, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
+        Instantiate(background, new Vector3(-19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
+        Instantiate(background, new Vector3(19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
+    }
+
+    private void loadLevel2Assets()
+    {
+        // Add Level 2 specific assets here when created
         Instantiate(background, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
         Instantiate(background, new Vector3(-19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
         Instantiate(background, new Vector3(19.20f, 0, 0), Quaternion.Euler(0, 0, 0));

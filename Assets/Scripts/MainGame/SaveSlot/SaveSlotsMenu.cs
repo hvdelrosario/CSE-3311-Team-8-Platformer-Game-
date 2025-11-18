@@ -31,8 +31,9 @@ public class SaveSlotsMenu : Menu
 
         if (isLoadingGame)
         {
+            // Set the profile ID and load the saved game with its scene
             DataPersistenceManager.instance.ChangeSelectedProfileId(saveSlot.GetProfileId());
-            SaveGameAndLoadScene();
+            LoadSavedGame();
         }
         else if (saveSlot.hasData)
         {
@@ -55,8 +56,16 @@ public class SaveSlotsMenu : Menu
             SaveGameAndLoadScene();
         }
     }
+    
+    private void LoadSavedGame()
+    {
+        // Load the game data and scene the player was in
+        DataPersistenceManager.instance.LoadGameAndScene();
+    }
+    
     private void SaveGameAndLoadScene()
     {
+        // For new games, start at TutorialLevel
         DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadSceneAsync("TutorialLevel");
     }

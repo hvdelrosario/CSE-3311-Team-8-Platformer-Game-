@@ -26,6 +26,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
     {
         if(playerHealth <= 0)
         {
+            // Mark as Game Over and save before going to EndScreen
+            if (DataPersistenceManager.instance != null)
+            {
+                // Set Game Over flag in the save data
+                DataPersistenceManager.instance.SetGameOverState(true);
+                DataPersistenceManager.instance.SaveGame();
+                Debug.Log("Game Over - saving with isGameOver flag");
+            }
             SceneManager.LoadScene("EndScreen");
         }
         if(Keyboard.current.rKey.wasPressedThisFrame)
@@ -72,32 +80,40 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
     public IEnumerator fallenOff()
     {
         playerHealth -= 1;
-        if (gameManager.GetComponent<GameManager>().mostRecentCheckpoint == -1)
+        GameManager gm = gameManager.GetComponent<GameManager>();
+        
+        if (gm.mostRecentCheckpoint == -1)
         {
-            respawnCoordinate = gameManager.GetComponent<GameManager>().startPosition;
+            respawnCoordinate = gm.startPosition;
+            Debug.Log("Respawning at start position: " + respawnCoordinate);
         }
         else
         {
-            respawnCoordinate = gameManager.GetComponent<GameManager>().checkpoints[gameManager.GetComponent<GameManager>().mostRecentCheckpoint].transform.position;
+            respawnCoordinate = gm.checkpoints[gm.mostRecentCheckpoint].transform.position;
+            //Accounting for player clipping into the checkpoint
+            respawnCoordinate += new Vector3(0, 0.5f, 0);
+            Debug.Log("Respawning at checkpoint " + gm.mostRecentCheckpoint + " at position: " + respawnCoordinate);
         }
-        //Accounting for player clipping into the checkpoint
-        respawnCoordinate += new Vector3(0, 0.5f, 0);
         transform.position = respawnCoordinate;
         yield return null;
     }
 
     public void LoadData(GameData data)
     {
-        // Only set position from saved data if it's not a zero vector (indicating a new game)
-        if (data.playerPosition != Vector3.zero)
-        {
-            this.transform.position = data.playerPosition;
-        }
+        // Load the saved health (will be maxHealth if loading from Game Over)
         this.playerHealth = data.playerHealth;
+        Debug.Log("LoadData: Player health set to " + this.playerHealth + ", isGameOver was: " + data.isGameOver);
     }
     public void SaveData(ref GameData data)
     {
-        data.playerPosition = this.transform.position;
-        data.playerHealth = this.playerHealth;
+        // If we're in Game Over state, save max health so player respawns with full health
+        if (data.isGameOver)
+        {
+            data.playerHealth = this.maxHealth;
+        }
+        else
+        {
+            data.playerHealth = this.playerHealth;
+        }
     }
 }

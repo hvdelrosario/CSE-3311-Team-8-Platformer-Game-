@@ -38,9 +38,9 @@ public class TitleScreenController : Menu
     public void OnContinueClicked(string sceneName)
     {
         DisableMenuButtons();
-
-        DataPersistenceManager.instance.SaveGame();
-        SceneManager.LoadSceneAsync(sceneName);
+        
+        // Load the most recent save and its scene
+        DataPersistenceManager.instance.LoadGameAndScene();
     }
 
     public void DisableMenuButtons()

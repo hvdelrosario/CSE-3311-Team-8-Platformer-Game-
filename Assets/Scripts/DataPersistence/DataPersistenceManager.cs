@@ -20,7 +20,8 @@ public class DataPersistenceManager : MonoBehaviour
     [SerializeField] private bool useEncryption;
 
     private GameData gameData;
-    private bool fileLoaded = false; 
+    private bool fileLoaded = false;
+    private bool isTransitioningToNewLevel = false;
 
     private List<IDataPersistence> dataPersistenceObjects;
 
@@ -65,15 +66,103 @@ public class DataPersistenceManager : MonoBehaviour
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
-        LoadGame();
+        
+        if (isTransitioningToNewLevel)
+        {
+            // We're in a new level - spawn at start, then save the new scene data
+            isTransitioningToNewLevel = false;
+            
+            if (this.gameData != null)
+            {
+                Debug.Log("Transitioned to new level: " + scene.name + " (playerPos reset to Vector3.zero, checkpoint = -1)");
+                
+                // Apply the reset data to all objects (playerPosition is Vector3.zero, checkpoint is -1)
+                foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+                {
+                    dataPersistenceObj.LoadData(gameData);
+                }
+                
+                // NOW update the scene name after LoadData has been called
+                this.gameData.currentSceneName = scene.name;
+                
+                // Save immediately so the new scene is recorded
+                SaveGame();
+            }
+        }
+        else
+        {
+            // Normal scene load - just load the data
+            LoadGame();
+            
+            // Clear Game Over flag after loading and save
+            if (this.gameData != null && this.gameData.isGameOver)
+            {
+                this.gameData.isGameOver = false;
+                SaveGame();
+                Debug.Log("Game Over flag cleared after loading");
+            }
+        }
+    }
+
+    public void LoadGameAndScene()
+    {
+        if (disableDataPersistence)
+        {
+            return;
+        }
+
+        this.gameData = dataHandler.Load(selectedProfileId);
+
+        if (this.gameData != null && !string.IsNullOrEmpty(this.gameData.currentSceneName))
+        {
+            fileLoaded = true;
+            Debug.Log("LoadGameAndScene: Loading scene '" + this.gameData.currentSceneName + "' with checkpoint " + this.gameData.checkpointID + " at position " + this.gameData.playerPosition + ", isGameOver: " + this.gameData.isGameOver);
+            Debug.Log("Current scene is: " + SceneManager.GetActiveScene().name);
+            
+            // Load the scene the player was in
+            // OnSceneLoaded will handle calling LoadGame() which will apply the data
+            if (SceneManager.GetActiveScene().name != this.gameData.currentSceneName)
+            {
+                Debug.Log("Switching from scene '" + SceneManager.GetActiveScene().name + "' to '" + this.gameData.currentSceneName + "'");
+                SceneManager.LoadScene(this.gameData.currentSceneName);
+            }
+            else
+            {
+                Debug.Log("Already in correct scene, just loading data");
+                // If we're already in the correct scene, just load the data
+                this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+                foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+                {
+                    dataPersistenceObj.LoadData(gameData);
+                }
+                
+                // Clear Game Over flag after loading
+                if (this.gameData.isGameOver)
+                {
+                    this.gameData.isGameOver = false;
+                    SaveGame();
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("LoadGameAndScene: No valid game data found or scene name is empty. GameData null? " + (this.gameData == null) + ", Scene name: " + (this.gameData != null ? this.gameData.currentSceneName : "N/A"));
+        }
+    }
+
+    public void SetGameOverState(bool isGameOver)
+    {
+        if (this.gameData != null)
+        {
+            this.gameData.isGameOver = isGameOver;
+        }
     }
 
     public void ChangeSelectedProfileId(string newProfileId) 
     {
         // update the profile to use for saving and loading
         this.selectedProfileId = newProfileId;
-        // load the game, which will use that profile, updating our game data accordingly
-        LoadGame();
+        Debug.Log("Selected profile changed to: " + newProfileId);
     }
 
     public void DeleteProfileData(string profileId)
@@ -122,7 +211,7 @@ public class DataPersistenceManager : MonoBehaviour
         else
         {
             fileLoaded = true;
-
+            Debug.Log("LoadGame: Loaded data with checkpoint " + this.gameData.checkpointID + " in scene " + this.gameData.currentSceneName);
         }
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
@@ -144,6 +233,8 @@ public class DataPersistenceManager : MonoBehaviour
             return;
         }
 
+        Debug.Log("SaveGame called - collecting data from all persistence objects...");
+        
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
             dataPersistenceObj.SaveData(ref gameData);
@@ -152,7 +243,20 @@ public class DataPersistenceManager : MonoBehaviour
         gameData.lastUpdated = System.DateTime.Now.ToBinary();
 
         dataHandler.Save(gameData, selectedProfileId);
+        
+        Debug.Log("SaveGame completed - checkpoint " + gameData.checkpointID + " saved to disk in scene " + gameData.currentSceneName);
 
+    }
+
+    public void ResetPositionForNewLevel()
+    {
+        if (this.gameData != null)
+        {
+            this.gameData.playerPosition = Vector3.zero;
+            this.gameData.checkpointID = -1;
+            isTransitioningToNewLevel = true;
+            Debug.Log("Player position and checkpoint reset for new level transition");
+        }
     }
 
     private void OnApplicationQuit()

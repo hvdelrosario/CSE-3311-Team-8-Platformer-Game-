@@ -14,8 +14,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask layers;
     public float jumpMaxTime = 0.25f;
     public float jumpCurrentTime = 0f;
-    public int jumpMaxCharges = 1;
-    public int jumpCharges = 0;
+    public int jumpMaxCharges = 1; //1
+    public int jumpCharges = 0;  //0
     public float dashMaxCooldown = 0.4f;
     public float dashCooldown;
     private bool touchingGround = false;
