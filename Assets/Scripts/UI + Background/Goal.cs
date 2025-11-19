@@ -19,6 +19,7 @@ public class Goal : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
+            collision.gameObject.GetComponent<PlayerStats>().playerHealth += 3;
             // Save current game state (including timer) before transitioning
             if (DataPersistenceManager.instance != null && DataPersistenceManager.instance.HasGameData())
             {

@@ -3632,9 +3632,9 @@ MonoBehaviour:
   signpost: {fileID: 7841162811126756820, guid: ddd78712c92fbd5479f5c5cbf8106816, type: 3}
   dialogueBox: {fileID: 729523599}
   spring: {fileID: 4034920083606338484, guid: 4752ca4ae09d4634b9f2c6836ddfb841, type: 3}
-  background1: {fileID: 0}
-  background2: {fileID: 0}
-  background3: {fileID: 0}
+  background1: {fileID: 1784268409284895077, guid: 8735d743ec9f1904abb36fdb4bc3e5c3, type: 3}
+  background2: {fileID: 1784268409284895077, guid: 4e258a2bb6537a6438c8bcceed8f99ce, type: 3}
+  background3: {fileID: 1784268409284895077, guid: eb3cf3f875d8f454b8e0f7c69d24c244, type: 3}
   heart: {fileID: 8331053308320118976, guid: 30256950a890c2f45a675fcead604884, type: 3}
   player: {fileID: 1429766952}
   canvas: {fileID: 25926864}

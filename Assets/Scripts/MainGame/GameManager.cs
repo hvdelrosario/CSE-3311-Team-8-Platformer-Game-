@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         generateSignpost(new Vector2(-4, 0.4f), new string[] {"A gap. Should be no problem however.", "Use the up arrow key in order to jump over the gap."});
         generateSignpost(new Vector2(27, 4.4f), new string[] {"Alright. This one's a bit bigger than before.", "You can boost in any direction with the x key. Try it out on this."});
         generateSignpost(new Vector2(22, 4.4f), new string[] {"See that yellow platform over there? Run over it to activate the checkpoint and save your progress.", "When you respawn, you'll respawn at the last saved checkpoint."});
-        generateSignpost(new Vector2(88.5f, 16.4f), new string[] {"Congratulations on completing the tutorial! Moving onto the next level."});
+        generateSignpost(new Vector2(88.5f, 16.4f), new string[] {"Congratulations on completing the tutorial! You get three hearts back to keep you going.", "Moving onto the next level."});
 
         generateCheckpoint(new Vector2(24.5f, 3.125f));
         
