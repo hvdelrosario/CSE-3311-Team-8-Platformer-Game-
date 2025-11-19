@@ -4,6 +4,8 @@ public class Background : MonoBehaviour
 {
     private float initialX;
     private float finalX;
+    //This is for backgrounds that have multiple parts, the more there are, the more we push them up
+    public int layerNumber;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,7 +18,7 @@ public class Background : MonoBehaviour
         //Backgrounds should slightly follow the camera to a fraction of the distance away
         //Note we want the backgrounds at the very back
         finalX = initialX + (Camera.main.transform.position.x * 0.75f);
-        transform.position = new Vector3(finalX, Camera.main.transform.position.y, 10);
+        transform.position = new Vector3(finalX, Camera.main.transform.position.y, 10 - 2 * layerNumber);
         //1920 * 2 screens away, need to shift 1920 * 3 screens away hwoever
         if((transform.position.x - Camera.main.transform.position.x) > 38.40f)
         {

@@ -24,6 +24,10 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
     // Update is called once per frame
     void Update()
     {
+        if(playerHealth > maxHealth)
+        {
+            playerHealth = maxHealth;
+        }
         if(playerHealth <= 0)
         {
             // Mark as Game Over and save before going to EndScreen

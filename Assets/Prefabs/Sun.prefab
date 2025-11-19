@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9133494915519048707}
   - component: {fileID: 3820249138551467796}
   m_Layer: 7
-  m_Name: Background 2
+  m_Name: Sun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -6274795223999382290, guid: f89816bf1c189584d86d57264abc5f0d, type: 3}
+  m_Sprite: {fileID: 1262949586603178558, guid: 095fd47bc2fe832479ae39271f0d0716, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

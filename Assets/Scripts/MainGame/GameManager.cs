@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public GameObject spring;
     public GameObject background1;
     public GameObject background2;
+    public GameObject background2point5;
     public GameObject background3;
     private GameObject currentBackground;
     public GameObject heart;
@@ -184,7 +185,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
             }
         }
         currentLives = playerScript.playerHealth;
-
+        if(currentLives > playerScript.maxHealth)
+        {
+            currentLives = playerScript.maxHealth;
+        }
         if(Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             pauseMenu.SetActive(!pauseMenu.activeSelf);
@@ -320,6 +324,29 @@ public class GameManager : MonoBehaviour, IDataPersistence
         currentBackground = background2;
 
         // Add Level 2 specific assets here when created
+
+        GameObject temp = Instantiate(background2point5, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
+        temp.GetComponent<Background>().layerNumber = 1;
+        //In world space, 100 pixels per unit currently
+        temp = Instantiate(background2point5, new Vector3(-19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
+        temp.GetComponent<Background>().layerNumber = 1;
+        temp = Instantiate(background2point5, new Vector3(19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
+        temp.GetComponent<Background>().layerNumber = 1;
+
+
+        generateSignpost(new Vector2(-6.5f, 19.4f), new string[] {"Seems like there's a lot of wind and up ahead.", "Mind your footing."});
+
+        generateCheckpoint(new Vector2(-9f, 32.125f));
+        generateCheckpoint(new Vector2(48f, 36.125f));
+
+
+        generatetimerPowerup(new Vector2(-9.5f, 39.5f), 20f);
+        generatetimerPowerup(new Vector2(8f, 27f), 15f);
+        generatetimerPowerup(new Vector2(54.5f, 34.5f), 10f);
+        generatetimerPowerup(new Vector2(125.5f, 59.5f), 15f);
+        generatetimerPowerup(new Vector2(222.5f, 56.5f), 25f);
+        generatetimerPowerup(new Vector2(216.5f, 31.5f), 20f);
+
     }
 
     private void loadLevel3Assets()
