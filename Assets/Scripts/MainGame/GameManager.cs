@@ -9,7 +9,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public GameObject signpost;
     public GameObject dialogueBox;
     public GameObject spring;
-    public GameObject background;
+    public GameObject background1;
+    public GameObject background2;
+    public GameObject background3;
+    private GameObject currentBackground;
     public GameObject heart;
     public GameObject player;
     public GameObject canvas;
@@ -66,7 +69,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         // timePassed will be loaded from save data in LoadData if it exists
         
+
         // Load scene-specific assets to populate checkpoints list
+
         if(SceneManager.GetActiveScene().name == "TutorialLevel")
         {
             loadTutorialLevelAssets();
@@ -79,7 +84,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             loadLevel2Assets();
         }
-        
+        Instantiate(currentBackground, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
+        //In world space, 100 pixels per unit currently
+        Instantiate(currentBackground, new Vector3(-19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
+        Instantiate(currentBackground, new Vector3(19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
+
         Debug.Log("Start() completed. Scene: " + SceneManager.GetActiveScene().name + ", Start position: " + startPosition + ", Checkpoints in list: " + checkpoints.Count);
         
         // Initialize values for new games only
@@ -248,30 +257,33 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
     public void exitToTitleScreen()
     {
+            if (DataPersistenceManager.instance != null)
+            {
+                DataPersistenceManager.instance.SaveGame();
+                Debug.Log("SAVED");
+            }
         SceneManager.LoadScene("TitleScreen");
     }
 
     private void loadTutorialLevelAssets()
     {
-        generateSignpost(new Vector2(-12, 0.58f), new string[] {"Hello.", "You came from out of nowhere... Let's get you moving.", "Use your left and right arrow keys to move around."});
-        generateSignpost(new Vector2(-4, 0.58f), new string[] {"A gap. Should be no problem however.", "Use the up arrow key in order to jump over the gap."});
-        generateSignpost(new Vector2(27, 4.58f), new string[] {"Alright. This one's a bit bigger than before.", "You can boost in any direction with the x key. Try it out on this."});
-        generateSignpost(new Vector2(22, 4.58f), new string[] {"See that yellow platform over there? Run over it to activate the checkpoint and save your progress.", "When you respawn, you'll respawn at the last saved checkpoint."});
-        generateSignpost(new Vector2(88.5f, 16.58f), new string[] {"Congratulations on completing the tutorial! Moving onto the next level."});
+        currentBackground = background1;
+
+        generateSignpost(new Vector2(-12, 0.4f), new string[] {"Hello.", "You came from out of nowhere... Let's get you moving.", "Use your left and right arrow keys to move around."});
+        generateSignpost(new Vector2(-4, 0.4f), new string[] {"A gap. Should be no problem however.", "Use the up arrow key in order to jump over the gap."});
+        generateSignpost(new Vector2(27, 4.4f), new string[] {"Alright. This one's a bit bigger than before.", "You can boost in any direction with the x key. Try it out on this."});
+        generateSignpost(new Vector2(22, 4.4f), new string[] {"See that yellow platform over there? Run over it to activate the checkpoint and save your progress.", "When you respawn, you'll respawn at the last saved checkpoint."});
+        generateSignpost(new Vector2(88.5f, 16.4f), new string[] {"Congratulations on completing the tutorial! Moving onto the next level."});
 
         generateCheckpoint(new Vector2(24.5f, 3.125f));
         
         generateSwitchGate(new Vector2(80.5f, 6.125f), new Vector2(87.125f, 17f), 0);
         Instantiate(spring, new Vector2(61.5f, 16.58f), Quaternion.Euler(0, 0, 0));
-
-        Instantiate(background, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
-        //In world space, 100 pixels per unit currently
-        Instantiate(background, new Vector3(-19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
-        Instantiate(background, new Vector3(19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
     }
 
     private void loadLevel1Assets()
     {
+        currentBackground = background1;
 
         generateSignpost(new Vector2(-10, 0.58f), new string[] {"Note that there's a timer during your run.", "You may be able to reduce it by collecting some stuff..."});
         generateSignpost(new Vector2(9, 8.58f), new string[] {"Mind the spikes. They do hurt."});
@@ -298,18 +310,19 @@ public class GameManager : MonoBehaviour, IDataPersistence
         generatetimerPowerup(new Vector2(66f, 26.5f), 25f);
         generatetimerPowerup(new Vector2(80f, 44.5f), 15f);
         generatetimerPowerup(new Vector2(110f, 19.5f), 25f);
-
-
-        Instantiate(background, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
-        Instantiate(background, new Vector3(-19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
-        Instantiate(background, new Vector3(19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
     }
 
     private void loadLevel2Assets()
     {
+        currentBackground = background2;
+
         // Add Level 2 specific assets here when created
-        Instantiate(background, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
-        Instantiate(background, new Vector3(-19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
-        Instantiate(background, new Vector3(19.20f, 0, 0), Quaternion.Euler(0, 0, 0));
+    }
+
+    private void loadLevel3Assets()
+    {
+        currentBackground = background3;
+
+        // Add Level 2 specific assets here when created
     }
 }
