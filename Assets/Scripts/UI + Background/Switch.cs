@@ -4,7 +4,6 @@ public class Switch : MonoBehaviour
 {
     public GameObject gate;
     private SpriteRenderer sprite;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -14,6 +13,7 @@ public class Switch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
