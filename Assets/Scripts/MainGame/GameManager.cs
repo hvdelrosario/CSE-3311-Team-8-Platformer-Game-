@@ -172,8 +172,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
     void Update()
     {
         timePassed += Time.deltaTime;
-        timerText.GetComponent<TextMeshProUGUI>().SetText("Timer: " + timePassed.ToString());
-        if(playerScript.playerHealth < currentLives)
+        float hours = Mathf.Floor((timePassed / 3600) % 60);
+        float minutes = Mathf.Floor((timePassed / 60) % 60);
+        float seconds = Mathf.Floor(timePassed % 60);
+        float hundredths = (timePassed * 100) % 100;
+        timerText.GetComponent<TextMeshProUGUI>().SetText("Timer: " + hours.ToString("00") + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + ":" + hundredths.ToString("00"));
         {
             for(int i = currentLives - 1; i >= playerScript.playerHealth; i--)
             {
