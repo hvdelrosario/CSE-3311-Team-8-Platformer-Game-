@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using TMPro;
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -31,9 +32,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public int mostRecentCheckpoint;
     public Vector3 startPosition;
     public float timePassed;
+    private bool finishGame;
+    private float finishAnimation;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        finishGame = false;
+        finishAnimation = 0f;
         playerScript = player.GetComponent<PlayerStats>();
         hearts = new List<GameObject>();
         checkpoints = new List<GameObject>();
@@ -216,6 +221,17 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 Debug.Log("Game manually saved! Checkpoint: " + mostRecentCheckpoint);
             }
         }
+        if(finishGame)
+        {
+            finishAnimation += 0.5f * Time.deltaTime;
+            Color temp = finishPanel.GetComponent<Image>().color;
+            temp.a = finishAnimation;
+            finishPanel.GetComponent<Image>().color = temp;
+            if(finishPanel.GetComponent<Image>().color.a >= 0.99)
+            {
+                SceneManager.LoadScene("FinishScreen");
+            }
+        }
     }
 
     private void generateSignpost(Vector2 location, string[] textToInsert)
@@ -361,9 +377,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
         // Add Level 2 specific assets here when created
     }
 
-    public void finishGame()
+    public void finishTheGame()
     {
-        
+        finishGame = true;
     }
 
 }

@@ -11,6 +11,7 @@ TagManager:
   - Spikes
   - Powerup
   - MovingPlatform
+  - FinishZone
   layers:
   - Default
   - TransparentFX

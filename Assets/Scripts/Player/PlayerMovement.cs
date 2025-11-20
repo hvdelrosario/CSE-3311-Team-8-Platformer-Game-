@@ -5,6 +5,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     public InputAction playerControls;
+    public AudioSource[] audios;
     private GameObject feet;
     private GameObject trail;
     private GameObject playerOrientation;
@@ -61,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
         {
             cameraScript.setMode(CameraScript.Actions.ZOOMIN);
             jumpCharges = jumpMaxCharges;
+            audios[3].Play();
         }
         //#Negate gravity when starting jump or dashing
         if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpCharges > 0)
@@ -69,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
             jumpCharges -= 1;
             cameraScript.setMode(CameraScript.Actions.ZOOMOUT);
             rigid.linearVelocity = new Vector3(rigid.linearVelocity.x, 0, 0);
+            audios[0].Play();
         }
         if(Keyboard.current.xKey.wasPressedThisFrame && dashCooldown <= 0)
         {
@@ -85,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 dashCooldown = 0.01f;
             }
+            audios[2].Play();
         }
         if(touchingGround)
         {

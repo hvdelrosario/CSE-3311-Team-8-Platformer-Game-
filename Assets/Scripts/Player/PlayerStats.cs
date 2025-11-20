@@ -69,7 +69,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
         }
         if(collider.gameObject.CompareTag("FinishZone"))
         {
-            StartCoroutine(fallenOff());
+            gameManager.GetComponent<GameManager>().finishTheGame();
         }
         else if(collider.gameObject.CompareTag("Powerup"))
         {
