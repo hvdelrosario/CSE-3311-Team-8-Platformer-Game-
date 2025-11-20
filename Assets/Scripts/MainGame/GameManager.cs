@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public GameObject pauseMenu;
     public GameObject timerPowerup;
     public GameObject timerText;
+    public GameObject finishPanel;
     private PlayerStats playerScript;
     public int currentLives;
     private List<GameObject> hearts;
@@ -84,6 +85,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
         else if(SceneManager.GetActiveScene().name == "Level2")
         {
             loadLevel2Assets();
+        }
+        else if(SceneManager.GetActiveScene().name == "Level3")
+        {
+            loadLevel3Assets();
         }
         Instantiate(currentBackground, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
         //In world space, 100 pixels per unit currently
@@ -355,4 +360,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         // Add Level 2 specific assets here when created
     }
+
+    public void finishGame()
+    {
+        
+    }
+
 }

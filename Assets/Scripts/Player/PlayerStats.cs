@@ -67,6 +67,10 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
         {
             StartCoroutine(fallenOff());
         }
+        if(collider.gameObject.CompareTag("FinishZone"))
+        {
+            StartCoroutine(fallenOff());
+        }
         else if(collider.gameObject.CompareTag("Powerup"))
         {
             gameManager.GetComponent<GameManager>().timePassed -= collider.gameObject.GetComponent<TimerPowerup>().timeCut;

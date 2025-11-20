@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         //Additionally should not check while jumping as will give n + 1 jumps
         // Debug.Log(GetComponent<BoxCollider2D>().bounds.size.x);
         //The -0.02f is to prevent hopping up corners of walls
-        touchingGround = Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x - 0.02f, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers);
+        touchingGround = Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x - 0.02f, 0.15f), 0f, new Vector2(0, -1), 0.15f, layers);
         if(jumpCurrentTime <= 0 && jumpCharges < jumpMaxCharges && touchingGround)
         {
             cameraScript.setMode(CameraScript.Actions.ZOOMIN);
@@ -130,8 +130,27 @@ public class PlayerMovement : MonoBehaviour
         {
             rigid.AddForce(collision.gameObject.transform.up * 40, ForceMode2D.Impulse);
         }
+        //Note to self: When using this technique make sure to turn player interpolation off
+        if(collision.gameObject.CompareTag("MovingPlatform") && touchingGround)
+        {
+            transform.SetParent(collision.gameObject.transform);
+        }
     }
-    //Use fixed update for physics that are not impulses (as well as any timers that uses it)!
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("MovingPlatform") && touchingGround)
+        {
+            transform.SetParent(collision.gameObject.transform);
+        }
+    }
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("MovingPlatform") && touchingGround)
+        {
+            transform.SetParent(null);
+        }
+    }
+
 
 
     void FixedUpdate()
@@ -145,7 +164,7 @@ public class PlayerMovement : MonoBehaviour
                 jumpCurrentTime -= Time.deltaTime;
             }
             //If you cancel a jump while it's active then your jump is done (or touch the ground)
-            else if (!Keyboard.current.upArrowKey.isPressed || Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.1f), 0f, new Vector2(0, -1), 0.1f, layers))
+            else if (!Keyboard.current.upArrowKey.isPressed || Physics2D.BoxCast(feet.transform.position, new Vector2(GetComponent<BoxCollider2D>().bounds.size.x, 0.15f), 0f, new Vector2(0, -1), 0.15f, layers))
             {
                 jumpCurrentTime = 0;
             }

@@ -10,6 +10,7 @@ TagManager:
   - Checkpoint
   - Spikes
   - Powerup
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX
