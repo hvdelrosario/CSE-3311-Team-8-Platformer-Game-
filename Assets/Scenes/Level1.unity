@@ -38742,9 +38742,13 @@ MonoBehaviour:
   theSwitch: {fileID: 772302436565361505, guid: e9755aa45ba0bfd4db6f24eb397cd8fb, type: 3}
   gate: {fileID: 2035166742421991694, guid: 2a323b3b07b646b439a078786890b938, type: 3}
   pauseMenu: {fileID: 167527399}
+  titleButton: {fileID: 0}
   timerPowerup: {fileID: 697329647794907910, guid: ca7e9d2175faf0d4d922ec428d97b402, type: 3}
   timerText: {fileID: 2051728814}
+  timerBox: {fileID: 0}
   finishPanel: {fileID: 719129390}
+  winPanel: {fileID: 0}
+  congratulations: {fileID: 0}
   currentLives: 0
   checkpoints: []
   mostRecentCheckpoint: 0
@@ -46416,7 +46420,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &729523600
 RectTransform:
   m_ObjectHideFlags: 0
@@ -47787,8 +47791,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 627.5301, y: 370.73996}
-  m_SizeDelta: {x: -2222.58, y: -1078.59}
+  m_AnchoredPosition: {x: 503.78, y: 403.21}
+  m_SizeDelta: {x: -1910.93, y: -1078.51}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1316819762
 MonoBehaviour:

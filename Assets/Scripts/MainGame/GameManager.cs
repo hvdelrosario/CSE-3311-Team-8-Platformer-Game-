@@ -380,7 +380,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         temp.GetComponent<Background>().layerNumber = 1;
 
 
-        generateSignpost(new Vector2(-6.5f, 19.4f), new string[] {"Seems like there's a lot of wind and up ahead.", "Mind your footing."});
+        generateSignpost(new Vector2(-6.5f, 19.4f), new string[] {"Seems like there's a lot of wind up ahead.", "Mind your footing."});
 
         generateCheckpoint(new Vector2(-9f, 32.125f));
         generateCheckpoint(new Vector2(48f, 36.125f));
