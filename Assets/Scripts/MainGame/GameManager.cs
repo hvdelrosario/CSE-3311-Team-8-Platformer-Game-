@@ -22,9 +22,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public GameObject theSwitch;
     public GameObject gate;
     public GameObject pauseMenu;
+    public GameObject titleButton;
     public GameObject timerPowerup;
     public GameObject timerText;
+    public GameObject timerBox;
     public GameObject finishPanel;
+    public GameObject winPanel;
+    public GameObject congratulations;
     private PlayerStats playerScript;
     public int currentLives;
     private List<GameObject> hearts;
@@ -182,6 +186,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     // Update is called once per frame
     void Update()
     {
+        if(currentLives > playerScript.maxHealth)
+        {
+            currentLives = playerScript.maxHealth;
+        }
         timePassed += Time.deltaTime;
         float hours = Mathf.Floor((timePassed / 3600) % 60);
         float minutes = Mathf.Floor((timePassed / 60) % 60);
@@ -195,15 +203,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
             }
         }
         currentLives = playerScript.playerHealth;
-        if(currentLives > playerScript.maxHealth)
-        {
-            currentLives = playerScript.maxHealth;
-        }
+
         if(Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             pauseMenu.SetActive(!pauseMenu.activeSelf);
         }
-        if(pauseMenu.activeSelf)
+        if(pauseMenu.activeSelf || finishPanel.GetComponent<Image>().color.a >= 0.99)
         {
             Time.timeScale = 0f;  
         }
@@ -223,17 +228,37 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         if(finishGame)
         {
-            finishAnimation += 0.5f * Time.deltaTime;
-            Color temp = finishPanel.GetComponent<Image>().color;
-            temp.a = finishAnimation;
-            finishPanel.GetComponent<Image>().color = temp;
-            if(finishPanel.GetComponent<Image>().color.a >= 0.99)
+            if(finishPanel.GetComponent<Image>().color.a < 1f)
             {
-                SceneManager.LoadScene("FinishScreen");
+                finishAnimation += 0.0001f * Time.unscaledTime;
+                Color temp = finishPanel.GetComponent<Image>().color;
+                temp.a = finishAnimation;
+                finishPanel.GetComponent<Image>().color = temp;
+            }
+            else if(winPanel.GetComponent<Image>().color.a < 0.99f)
+            {
+                finishAnimation += 0.0001f * Time.unscaledTime;
+                Color temp = finishPanel.GetComponent<Image>().color;
+                temp.a = finishAnimation - 1;
+                winPanel.GetComponent<Image>().color = temp;
+            }
+            else
+            {
+                timerBox.transform.localPosition = new Vector3(0, 0, 0);
+                timerText.transform.localPosition = new Vector3(0, 0, 0);
+                finishAnimation += 0.0001f * Time.unscaledTime;
+                Color temp = finishPanel.GetComponent<Image>().color;
+                temp.a = finishAnimation - 2;
+                congratulations.GetComponent<TextMeshProUGUI>().color = temp;
+                titleButton.SetActive(true);
             }
         }
     }
 
+    void FixedUpdate()
+    {
+        
+    }
     private void generateSignpost(Vector2 location, string[] textToInsert)
     {
         GameObject temp = Instantiate(signpost, location, Quaternion.Euler(0, 0, 0));        
@@ -373,6 +398,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private void loadLevel3Assets()
     {
         currentBackground = background3;
+
+        generateSignpost(new Vector2(-0.5f, 0.4f), new string[] {"I think we're approaching the end.", "There's not much flooring left, be careful."});
+        generateSignpost(new Vector2(126.5f, 78.4f), new string[] {"Here it is.", "A way out of these darkest depths.", "No one should have to be in a place like this. Go up, to brighter days.", "Be free."});
+
+        generateCheckpoint(new Vector2(31f, 1.125f));
+        generateCheckpoint(new Vector2(86.5f, 19.125f));
+
+        generatetimerPowerup(new Vector2(33f, -7f), 25f);
+        generatetimerPowerup(new Vector2(76f, 21f), 15f);
+        generatetimerPowerup(new Vector2(97f, 56f), 25f);
 
         // Add Level 2 specific assets here when created
     }

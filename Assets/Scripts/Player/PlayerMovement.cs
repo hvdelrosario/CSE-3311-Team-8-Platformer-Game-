@@ -62,7 +62,6 @@ public class PlayerMovement : MonoBehaviour
         {
             cameraScript.setMode(CameraScript.Actions.ZOOMIN);
             jumpCharges = jumpMaxCharges;
-            audios[3].Play();
         }
         //#Negate gravity when starting jump or dashing
         if(Keyboard.current.upArrowKey.wasPressedThisFrame && jumpCharges > 0)
@@ -88,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 dashCooldown = 0.01f;
             }
-            audios[2].Play();
+            audios[3].Play();
         }
         if(touchingGround)
         {
@@ -149,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void OnCollisionExit2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("MovingPlatform") && touchingGround)
+        if(collision.gameObject.CompareTag("MovingPlatform"))
         {
             transform.SetParent(null);
         }
